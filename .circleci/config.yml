@@ -9,11 +9,11 @@ jobs:
       - run: sudo composer self-update
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-{{ checksum "src/composer.lock" }}
             - composer-v1-
-      - run: sudo composer install -n --no-dev --prefer-dist
+      - run: cd ./src && ls -al && sudo composer install -n --no-dev --prefer-dist
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-v1-{{ checksum "src/composer.lock" }}
           paths:
             - vendor
   node:
@@ -22,11 +22,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Node Version
-          command: node --version
-      - run:
           name: Npm Version
           command: npm --version
+      - run:
+          name: Npm Install
+          command: cd ./src && ls -al && npm i && npm run prod
 
 workflows:
   version: 2
