@@ -1,8 +1,46 @@
-version: 2.1
+version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/php:7.3-node-browsers
+    working_directory: ~/src
     steps:
       - checkout
-      - run: echo "hello world"
+      - run: sudo composer self-update
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - run: sudo composer install -n --no-dev --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+  node:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: Node Version
+          command: node --version
+      - run:
+          name: Npm Version
+          command: npm --version
+
+workflows:
+  version: 2
+  build-and-node:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+      - node:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
