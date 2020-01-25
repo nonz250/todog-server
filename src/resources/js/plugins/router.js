@@ -3,8 +3,13 @@ import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 
+let routes = [];
+
 import test from "../routes/test";
-const routes = test.routes;
+routes = routes.concat(test.routes);
+
+import task from "../routes/task";
+routes = routes.concat(task.routes);
 
 export default new VueRouter({
     mode: 'history',
