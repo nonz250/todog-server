@@ -1,5 +1,13 @@
 const mix = require('laravel-mix');
 
+const vuetifyLoaderPlugins = require('vuetify-loader/lib/plugin');
+
+mix.webpackConfig({
+    plugins: [
+        new vuetifyLoaderPlugins(),
+    ]
+});
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management

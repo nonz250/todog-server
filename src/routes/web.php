@@ -18,3 +18,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/**
+ * NOTE: Vueのルーティング対策で、これまで無いルーティングはすべてここにVueのSPAルートに集結
+ */
+// NOTE: default
+Route::get('/{controller?}/{action?}/{any?}', function ($page) {
+    return view('welcome');
+});
