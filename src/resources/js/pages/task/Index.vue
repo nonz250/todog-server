@@ -1,47 +1,11 @@
 <template>
     <div>
         <ul class="horizontal-list">
-            <li class="item">
-                <v-card class="card-max-height">
-                    <v-card-title>タスクステータス / ジャンル</v-card-title>
-                    <v-card-text>ここにリスト</v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn text outlined>
-                            <v-icon>mdi-plus-circle-outline</v-icon>
-                            タスクを追加する
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
+            <li class="task-list" v-for="(list, index) in lists">
+                <task-list :task-list="list"/>
             </li>
-            <li class="item">
-                <v-card class="card-max-height">
-                    <v-card-title>タスクステータス / ジャンル</v-card-title>
-                    <v-card-text>ここにリスト</v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn text outlined>
-                            <v-icon>mdi-plus-circle-outline</v-icon>
-                            タスクを追加する
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </li>
-            <li class="item">
-                <v-card class="card-max-height">
-                    <v-card-title>タスクステータス / ジャンル</v-card-title>
-                    <v-card-text>ここにリスト</v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn text outlined>
-                            <v-icon>mdi-plus-circle-outline</v-icon>
-                            タスクを追加する
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </li>
-            <li class="item">
-                <v-btn text outlined block class="add-list-container" color="primary">
+            <li class="task-list">
+                <v-btn text outlined block class="add-list-container" color="primary" @click="clickAddList">
                     <v-icon>mdi-plus-circle-outline</v-icon>
                     リストを追加する
                 </v-btn>
@@ -53,11 +17,29 @@
 <script>
     export default {
         name: "Index",
-        created() {},
+        created() {
+        },
+        data() {
+            return {
+                lists: [
+                    {value: 1, name: 'タスクリストの設定項目'},
+                    {value: 1, name: 'タスクリストの設定項目'},
+                    {value: 1, name: 'タスクリストの設定項目'},
+                ],
+            }
+        },
+        created() {
+        },
         methods: {
             click() {
                 const loader = this.$store.getters['loader/loader'];
                 this.$store.dispatch('loader/setLoader', !loader);
+            },
+            clickAddList() {
+                this.lists.push({
+                    value: 1,
+                    name: 'タスクリストの設定項目'
+                });
             }
         }
     }
@@ -70,7 +52,7 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    .item {
+    .task-list {
         display: inline-block;
         vertical-align: top;
         height: 100vh;
@@ -88,19 +70,19 @@
     }
 
     @media screen and (min-width: 375px) and (max-width: 850px) {
-        .item {
+        .task-list {
             width: 90%;
         }
     }
 
     @media screen and (min-width: 851px) and (max-width: 920px) {
-        .item {
+        .task-list {
             width: 60%;
         }
     }
 
     @media screen and (min-width: 921px) {
-        .item {
+        .task-list {
             width: 40%;
         }
     }
