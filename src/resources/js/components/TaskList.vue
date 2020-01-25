@@ -15,6 +15,7 @@
                     @start="drag=true"
                     @end="drag=false"
                     :options="{animation: 200}"
+                    :disabled="!enabled"
                 >
                     <div v-for="(task, index) in tasks" :key="index">
 
@@ -101,6 +102,7 @@
 
 <script>
     import draggableComponent from 'vuedraggable';
+    import isMobile from 'ismobilejs';
 
     export default {
         name: "TaskList",
@@ -115,6 +117,7 @@
             return {
                 isAdd: false,
                 detail: false,
+                enabled: true,
                 lists: [
                     {value: 1, name: 'タスクリストの設定項目'},
                     {value: 1, name: 'タスクリストの設定項目'},
@@ -134,6 +137,9 @@
                 task: '',
             }
         },
+        created() {
+            this.enabled = !isMobile(navigator.userAgent).any
+        },
         methods: {
             clickAddTask() {
                 this.tasks.push({value: 1, name: this.task});
@@ -147,7 +153,7 @@
                         console.log('after status change --> ' + this.tasks[i].status)
                     }
                 }
-            }
+            },
         }
     }
 </script>

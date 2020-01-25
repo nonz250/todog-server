@@ -50,6 +50,8 @@
         overflow-x: auto;
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
+        margin: 0;
+        padding: 0;
     }
 
     .task-list {
