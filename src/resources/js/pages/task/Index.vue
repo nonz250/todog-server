@@ -52,10 +52,8 @@
 
 <script>
     export default {
-        name: "Test",
-        created() {
-            this.$store.dispatch('loader/setLoader', true);
-        },
+        name: "Index",
+        created() {},
         methods: {
             click() {
                 const loader = this.$store.getters['loader/loader'];
