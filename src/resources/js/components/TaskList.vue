@@ -18,7 +18,7 @@
                 >
                     <div v-for="(task, index) in tasks" :key="index">
 
-                        <task-list-item :task="task" local-class="draggable-item"/>
+                        <task-list-item :task="task" local-class="draggable-item" @change="change"/>
 
                         <v-divider/>
 
@@ -121,16 +121,15 @@
                     {value: 1, name: 'タスクリストの設定項目'},
                 ],
                 tasks: [
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
-                    {value: 1, name: 'ここにタスクが表示される'},
+                    {id: 1, name: 'ここにタスクが表示される', status: 0},
+                    {id: 2, name: 'ここにタスクが表示される', status: 1},
+                    {id: 3, name: 'ここにタスクが表示される', status: 1},
+                    {id: 4, name: 'ここにタスクが表示される', status: 1},
+                    {id: 5, name: 'ここにタスクが表示される', status: 0},
+                    {id: 6, name: 'ここにタスクが表示される', status: 1},
+                    {id: 7, name: 'ここにタスクが表示される', status: 1},
+                    {id: 8, name: 'ここにタスクが表示される', status: 0},
+                    {id: 9, name: 'ここにタスクが表示される', status: 0},
                 ],
                 task: '',
             }
@@ -139,6 +138,15 @@
             clickAddTask() {
                 this.tasks.push({value: 1, name: this.task});
                 this.isAdd = false;
+            },
+            change(id, status) {
+                for (let i in this.tasks) {
+                    if (this.tasks[i].id === id) {
+                        console.log('before status change --> ' + status)
+                        this.tasks[i].status = status;
+                        console.log('after status change --> ' + this.tasks[i].status)
+                    }
+                }
             }
         }
     }
