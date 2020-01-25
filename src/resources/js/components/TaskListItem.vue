@@ -3,7 +3,7 @@
         :class="localClass"
     >
         <v-list-item-action>
-            <v-checkbox/>
+            <v-checkbox v-model="checked" @change="change"/>
         </v-list-item-action>
 
         <v-list-item-content>
@@ -19,6 +19,9 @@
                 bottom
             >
                 <template v-slot:activator="{ on }">
+                    <v-scroll-x-transition>
+                        <v-icon v-if="task.status === 1" color="success">mdi-check</v-icon>
+                    </v-scroll-x-transition>
                     <v-btn icon v-on="on">
                         <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
@@ -53,8 +56,21 @@
         data() {
             return {
                 detail: false,
+                checked: false,
                 lists: [{}, {}, {}, {}, {}],
 
+            }
+        },
+        created() {
+            this.checked = this.task.status === 1;
+        },
+        methods: {
+            change() {
+                this.$emit(
+                    'change',
+                    this.task.id,
+                    this.checked ? 1 : 0
+                )
             }
         }
     }
