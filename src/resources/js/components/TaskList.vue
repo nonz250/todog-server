@@ -74,7 +74,7 @@
 
             <v-textarea
                 v-show="isAdd === true"
-                v-model="task"
+                v-model="taskName"
                 class="float-left"
                 label="タスク"
                 rows="2"
@@ -134,7 +134,7 @@
                     {id: 8, name: 'ここにタスクが表示される', status: 0},
                     {id: 9, name: 'ここにタスクが表示される', status: 0},
                 ],
-                task: '',
+                taskName: '',
             }
         },
         created() {
@@ -142,15 +142,17 @@
         },
         methods: {
             clickAddTask() {
-                this.tasks.push({value: 1, name: this.task});
                 this.isAdd = false;
+                const task = {
+                    id: null,
+                    name: this.taskName,
+                };
+                this.$emit('clickAddTask', task);
             },
             change(id, status) {
                 for (let i in this.tasks) {
                     if (this.tasks[i].id === id) {
-                        console.log('before status change --> ' + status)
                         this.tasks[i].status = status;
-                        console.log('after status change --> ' + this.tasks[i].status)
                     }
                 }
             },
