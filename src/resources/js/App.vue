@@ -1,5 +1,6 @@
 <template>
     <v-app>
+        <nav-component></nav-component>
         <transition mode="out-in">
             <router-view></router-view>
         </transition>

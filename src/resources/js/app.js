@@ -24,6 +24,8 @@ import store from "./plugins/store";
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('app', require('./App.vue').default);
+Vue.component('nav-component', require('./components/Nav.vue').default);
+Vue.component('nav-drawer-component', require('./components/NavDrawer.vue').default);
 Vue.component('task-list', require('./components/TaskList.vue').default);
 Vue.component('task-list-item', require('./components/TaskListItem.vue').default);
 
