@@ -2,7 +2,7 @@
     <div>
         <ul class="horizontal-list">
             <li class="task-list" v-for="(list, index) in lists">
-                <task-list :task-list="list"/>
+                <task-list :task-list="list" @clickAddTask="clickAddTask"/>
             </li>
             <li class="task-list">
                 <v-btn text outlined block class="add-list-container" color="primary" @click="clickAddList">
@@ -15,8 +15,11 @@
 </template>
 
 <script>
+    import mixin from "../../mixins/mixin";
+
     export default {
         name: "Index",
+        mixins:[mixin],
         created() {
         },
         data() {
@@ -40,6 +43,28 @@
                     value: 1,
                     name: 'タスクリストの設定項目'
                 });
+            },
+            clickAddTask(task){
+                const res = this.api('post', '/api/task', task);
+                if (res.status === 200) {
+                    // this.variant = 'primary'
+                    // this.snackbarText = this.getMessages(res.data.messages)
+                    // this.snackbar = true
+                    // this.users.unshift(res.data.users)
+                    alert(this.getMessages(res.data.messages))
+                } else if (res.status === 422) {
+                    // this.variant = 'error'
+                    // this.snackbarText = this.getMessages(res.data.errors)
+                    // this.snackbar = true
+                    alert(this.getMessages(res.data.errors))
+                } else {
+                    // this.variant = 'error'
+                    // this.snackbarText = this.getMessages([res.data.message])
+                    // this.snackbar = true
+                    alert(this.getMessages([res.data.message]))
+                }
+
+                // this.tasks.push(task);
             }
         }
     }
