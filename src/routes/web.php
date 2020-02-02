@@ -22,5 +22,8 @@ Auth::routes();
  */
 // NOTE: default
 Route::get('/{controller?}/{action?}/{any?}', function ($page) {
-    return view('welcome');
+    if(!\Illuminate\Support\Facades\Auth::user()) {
+        return redirect('/login');
+    }
+    return view('vue');
 });
