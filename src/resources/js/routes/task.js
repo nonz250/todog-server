@@ -2,8 +2,8 @@ import Index from "../pages/task/Index";
 
 const routes = [
     {
-        name: 'task',
-        path: '/task',
+        name: 'home',
+        path: '/home',
         component: Index,
         meta: {
             title: 'Todog',
