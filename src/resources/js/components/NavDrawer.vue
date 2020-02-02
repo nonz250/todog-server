@@ -5,7 +5,7 @@
                          app
     >
         <v-list-item>
-            <v-list-item-title class="title">Luncher</v-list-item-title>
+            <v-list-item-title class="title">Todog</v-list-item-title>
             <v-btn icon @click="drawer = !drawer">
                 <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
@@ -18,7 +18,6 @@
                          :key="item.title"
                          @click="drawer=false"
                          :to="item.link"
-                         v-if="isDisplay(item.admin_only)"
             >
                 <v-list-item-action>
                     <v-icon>{{ item.icon }}</v-icon>
@@ -32,7 +31,6 @@
                           :key="index"
                           :prepend-icon="item.icon"
                           no-action
-                          v-if="isDisplay(item.admin_only)"
             >
                 <template v-slot:activator>
                     <v-list-item>
@@ -43,7 +41,6 @@
                 </template>
                 <v-list-item v-for="(subItem, i) in item.subItems"
                              :key="i"
-                             v-if="isDisplay(item.admin_only)"
                              :to="subItem.link"
                              @click="drawer=false"
                 >
@@ -56,9 +53,7 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-list-group>
-            <div v-if="isLogin"
-                 class="m-1"
-            >
+            <div>
                 <form action="/logout" method="post">
                     <input type="hidden" name="_token" :value="token"/>
                     <v-btn type="submit" block color="primary" outlined>ログアウト</v-btn>
@@ -78,35 +73,34 @@
                 drawer: false,
                 token: '',
                 normalItems: [
-                    {title: 'テスト', icon: '', link: "/test", admin_only: true},
-                    {title: 'ホーム', icon: 'dashboard', link: "/", admin_only: false},
-                    {title: 'マイページ', icon: 'home', link: "/mypage", admin_only: false},
+                    {title: 'トップページ', icon: 'mdi-view-dashboard', link: "/", admin_only: false},
+                    {title: 'ホーム', icon: 'mdi-home', link: "/home", admin_only: false},
                 ],
                 dropdownItems: [
-                    {
-                        title: '管理者機能',
-                        icon: 'supervised_user_circle',
-                        admin_only: true,
-                        subItems: [
-                            {
-                                title: "ランチ会作成",
-                                icon: "restaurant",
-                                link: "/admin",
-                            },
-                        ]
-                    },
-                    {
-                        title: '過去のランチ会',
-                        icon: 'history',
-                        admin_only: true,
-                        subItems: [
-                            {
-                                title: "ランチ会一覧",
-                                icon: "list",
-                                link: "/admin/meetings",
-                            }
-                        ]
-                    },
+                    // {
+                    //     title: '管理者機能',
+                    //     icon: 'supervised_user_circle',
+                    //     admin_only: true,
+                    //     subItems: [
+                    //         {
+                    //             title: "ランチ会作成",
+                    //             icon: "restaurant",
+                    //             link: "/admin",
+                    //         },
+                    //     ]
+                    // },
+                    // {
+                    //     title: '過去のランチ会',
+                    //     icon: 'history',
+                    //     admin_only: true,
+                    //     subItems: [
+                    //         {
+                    //             title: "ランチ会一覧",
+                    //             icon: "list",
+                    //             link: "/admin/meetings",
+                    //         }
+                    //     ]
+                    // },
                 ],
                 user: null
             }
@@ -115,16 +109,9 @@
             drawerControl() {
                 this.drawer = !this.drawer
             },
-            isDisplay(adminOnly) {
-                if (adminOnly) {
-                    return this.$store.getters['auth/isAdmin'];
-                }
-                return true;
-            }
         },
         created() {
             this.token = getCSRFToken()
-            this.user = this.$store.getters['auth/user']
         }
     }
 
