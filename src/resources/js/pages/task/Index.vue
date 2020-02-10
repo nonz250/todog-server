@@ -5,9 +5,27 @@
                 <task-list :task-list="list" @clickAddTask="clickAddTask"/>
             </li>
             <li class="task-list">
-                <v-btn text outlined block class="add-list-container" color="primary" @click="clickAddList">
+                <v-btn text outlined block class="add-list-container" color="primary"
+                       @click="isDisplayInputName = !isDisplayInputName">
+                    <span v-show="!isDisplayInputName">
+                        <v-icon>mdi-plus-circle-outline</v-icon>
+                        リストを追加する
+                    </span>
+                    <span v-show="isDisplayInputName">
+                        <v-icon>mdi-minus-circle-outline</v-icon>
+                        キャンセル
+                    </span>
+                </v-btn>
+                <v-text-field v-show="isDisplayInputName" v-model="name" placeholder="タスクリスト名"/>
+                <v-btn v-show="isDisplayInputName"
+                       color="primary"
+                       text
+                       outlined
+                       class="float-right"
+                       @click="clickAddList"
+                >
                     <v-icon>mdi-plus-circle-outline</v-icon>
-                    リストを追加する
+                    追加
                 </v-btn>
             </li>
         </ul>
@@ -19,49 +37,64 @@
 
     export default {
         name: "Index",
-        mixins:[mixin],
-        created() {
-        },
+        mixins: [mixin],
         data() {
             return {
+                isDisplayInputName: false,
+                name: '',
                 lists: [
-                    {value: 1, name: 'タスクリストの設定項目'},
-                    {value: 1, name: 'タスクリストの設定項目'},
-                    {value: 1, name: 'タスクリストの設定項目'},
+                    {id: 1, name: 'タスクリストの設定項目'},
+                    {id: 1, name: 'タスクリストの設定項目'},
+                    {id: 1, name: 'タスクリストの設定項目'},
                 ],
             }
-        },
-        created() {
         },
         methods: {
             click() {
                 const loader = this.$store.getters['loader/loader'];
                 this.$store.dispatch('loader/setLoader', !loader);
             },
-            clickAddList() {
-                this.lists.push({
-                    value: 1,
-                    name: 'タスクリストの設定項目'
-                });
+            async clickAddList() {
+                await this.$store.dispatch('loader/setLoader', true);
+                const params = new FormData();
+                params.append('name', this.name);
+                const res = await this.api('post', '/api/task_list', params);
+                if (res.status === 200) {
+                    this.lists.push({
+                        id: res.data.id,
+                        name: res.data.name,
+                    });
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+                await this.$store.dispatch('loader/setLoader', false);
             },
-            clickAddTask(task){
-                const res = this.api('post', '/api/task', task);
+            clickAddTask(task) {
+                const params = new FormData();
+                params.append('name', task.name);
+                const res = this.api('post', '/api/task', params);
                 if (res.status === 200) {
                     // this.variant = 'primary'
                     // this.snackbarText = this.getMessages(res.data.messages)
                     // this.snackbar = true
                     // this.users.unshift(res.data.users)
-                    alert(this.getMessages(res.data.messages))
+                    // alert(this.getMessages(res.data.messages))
                 } else if (res.status === 422) {
                     // this.variant = 'error'
                     // this.snackbarText = this.getMessages(res.data.errors)
                     // this.snackbar = true
-                    alert(this.getMessages(res.data.errors))
+                    // alert(this.getMessages(res.data.errors))
                 } else {
                     // this.variant = 'error'
                     // this.snackbarText = this.getMessages([res.data.message])
                     // this.snackbar = true
-                    alert(this.getMessages([res.data.message]))
+                    // alert(this.getMessages([res.data.message]))
                 }
 
                 // this.tasks.push(task);
