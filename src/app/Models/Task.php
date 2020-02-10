@@ -14,10 +14,12 @@ class Task extends Model
     protected $fillable = ['task_list_id', 'user_id', 'name', 'status'];
     protected $guarded = ['id'];
 
-    /** @var int 有効 */
-    public const STATUS_ENABLED = 0;
+    /** @var int デフォルト */
+    public const STATUS_DEFAULT = 0;
+    /** @var int 完了 */
+    public const STATUS_COMPLETED = 1;
     /** @var int 無効 */
-    public const STATUS_DISABLED = 1;
+    public const STATUS_DISABLED = 2;
 
     /**
      * @param UserId $userId
