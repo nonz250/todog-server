@@ -35,6 +35,7 @@ class CreateTaskRequest extends FormRequest
     {
         return [
             'name.required' => 'タスク名を入力してください。',
+            'name.string' => 'タスク名は文字列で入力してください。',
         ];
     }
 }

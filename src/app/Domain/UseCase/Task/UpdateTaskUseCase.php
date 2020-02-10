@@ -5,45 +5,55 @@ namespace App\Domain\UseCase\Task;
 
 
 use App\Domain\Repository\TaskRepositoryInterface;
+use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
-use App\Http\Requests\CreateTaskRequest;
-use App\Models\Task;
+use App\Http\Requests\UpdateTaskRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
-class CreateTaskUseCase
+final class UpdateTaskUseCase
 {
     /**
      * @var TaskRepositoryInterface
      */
     private $taskRepository;
 
+    /**
+     * UpdateTaskUseCase constructor.
+     *
+     * @param TaskRepositoryInterface $taskRepository
+     */
     public function __construct(TaskRepositoryInterface $taskRepository)
     {
         $this->taskRepository = $taskRepository;
     }
 
     /**
-     * @param CreateTaskRequest $request
+     * @param int $id
+     * @param UpdateTaskRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function __invoke(CreateTaskRequest $request): JsonResponse
+    public function __invoke(int $id, UpdateTaskRequest $request): JsonResponse
     {
+        $taskId = new TaskId($id);
         $userId = new UserId(Auth::id());
         $taskListId = new TaskListId($request->get('task_list_id'));
         $taskName = new TaskName($request->get('name'));
-        $taskStatus = new TaskStatus(Task::STATUS_DEFAULT);
+        $taskStatus = new TaskStatus($request->get('status'));
 
-        $task = $this->taskRepository->saveTask($taskListId, $userId, $taskName, $taskStatus);
+        $task = $this->taskRepository
+            ->updateTask($taskId, $taskListId, $userId, $taskName, $taskStatus)
+            ->first();
 
         return response()->json([
             'id' => $task->getAttribute('id'),
             'task_list_id' => $task->getAttribute('task_list_id'),
             'name' => $task->getAttribute('name'),
+            'status' => $task->getAttribute('status'),
         ]);
     }
 }

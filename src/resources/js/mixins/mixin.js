@@ -34,11 +34,11 @@ export default {
                 config.data = params
             } else if (method === 'put') {
                 params.append('_method', 'PUT');
-                config.method = method
+                config.method = 'post'
                 config.data = params
             } else if (method === 'delete') {
                 params.append('_method', 'DELETE');
-                config.method = method
+                config.method = 'post'
                 config.data = params
             } else {
                 throw 'api error'

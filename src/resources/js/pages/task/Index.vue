@@ -1,12 +1,17 @@
 <template>
     <div>
         <ul class="horizontal-list">
-            <li class="task-list" v-for="(list, index) in lists">
-                <task-list :task-list="list" @clickAddTask="clickAddTask"/>
+            <li class="task-list" v-for="(list, index) in lists" :key="index">
+                <task-list :task-list="list" @clickAddTask="clickAddTask" @change="change"/>
             </li>
             <li class="task-list">
-                <v-btn text outlined block class="add-list-container" color="primary"
-                       @click="isDisplayInputName = !isDisplayInputName">
+                <v-btn text
+                       outlined
+                       block
+                       class="add-list-container"
+                       color="primary"
+                       @click="isDisplayInputName = !isDisplayInputName"
+                >
                     <span v-show="!isDisplayInputName">
                         <v-icon>mdi-plus-circle-outline</v-icon>
                         リストを追加する
@@ -134,6 +139,27 @@
 
                 await this.$store.dispatch('loader/setLoader', false);
             },
+            async change(task) {
+                await this.$store.dispatch('loader/setLoader', true);
+
+                const params = new FormData();
+                params.append('task_list_id', task.task_list_id);
+                params.append('name', task.name);
+                params.append('status', task.status);
+
+                const res = await this.api('put', '/api/task/' + task.id, params);
+
+                if (res.status === 200) {
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+
                 await this.$store.dispatch('loader/setLoader', false);
             }
         }

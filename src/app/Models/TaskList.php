@@ -32,7 +32,7 @@ class TaskList extends Model
      * @param TaskListStatus $taskListStatus
      * @return bool
      */
-    public function saveTaskList(UserId $userId, TaskListName $taskListName, TaskListStatus $taskListStatus)
+    public function saveTaskList(UserId $userId, TaskListName $taskListName, TaskListStatus $taskListStatus): bool
     {
         return $this->fill([
             'user_id' => $userId->toInt(),

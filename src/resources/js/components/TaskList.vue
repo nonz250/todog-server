@@ -134,12 +134,8 @@
                 };
                 this.$emit('clickAddTask', this.taskList, task);
             },
-            change(id, status) {
-                for (let i in this.taskList.tasks) {
-                    if (this.taskList.tasks[i].id === id) {
-                        this.taskList.tasks[i].status = status;
-                    }
-                }
+            change(task) {
+                this.$emit('change', task)
             },
         }
     }
