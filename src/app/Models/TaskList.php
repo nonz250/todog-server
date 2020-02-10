@@ -19,6 +19,14 @@ class TaskList extends Model
     public const STATUS_DISABLED = 1;
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    /**
      * @param UserId $userId
      * @param TaskListName $taskListName
      * @param TaskListStatus $taskListStatus

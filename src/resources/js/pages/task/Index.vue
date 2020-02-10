@@ -49,10 +49,38 @@
                 ],
             }
         },
+        async created() {
+            await this.getTaskLists();
+        },
         methods: {
             click() {
                 const loader = this.$store.getters['loader/loader'];
                 this.$store.dispatch('loader/setLoader', !loader);
+            },
+            async getTaskLists() {
+                await this.$store.dispatch('loader/setLoader', true);
+
+                const res = await this.api('get', 'api/task_list', {});
+
+                if (res.status === 200) {
+                    for (let i in res.data) {
+                        this.lists.push({
+                            id: res.data[i].id,
+                            name: res.data[i].name,
+                            tasks: res.data[i].tasks,
+                        });
+                    }
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+
+                await this.$store.dispatch('loader/setLoader', false);
             },
             async clickAddList() {
                 await this.$store.dispatch('loader/setLoader', true);
@@ -89,7 +117,7 @@
                 const res = await this.api('post', '/api/task', params);
 
                 if (res.status === 200) {
-                    for(let i in this.lists) {
+                    for (let i in this.lists) {
                         if (this.lists[i].id === res.data.task_list_id) {
                             this.lists[i].tasks.push({
                                 id: res.data.id,
@@ -108,6 +136,8 @@
                     await this.$store.dispatch('snackbar/setColor', 'error');
                 }
 
+                await this.$store.dispatch('loader/setLoader', false);
+            },
                 await this.$store.dispatch('loader/setLoader', false);
             }
         }
