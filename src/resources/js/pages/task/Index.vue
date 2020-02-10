@@ -43,9 +43,9 @@
                 isDisplayInputName: false,
                 name: '',
                 lists: [
-                    {id: 1, name: 'タスクリストの設定項目'},
-                    {id: 1, name: 'タスクリストの設定項目'},
-                    {id: 1, name: 'タスクリストの設定項目'},
+                    {id: 1, name: 'タスクリストの設定項目', tasks: []},
+                    {id: 1, name: 'タスクリストの設定項目', tasks: []},
+                    {id: 1, name: 'タスクリストの設定項目', tasks: []},
                 ],
             }
         },
@@ -56,9 +56,12 @@
             },
             async clickAddList() {
                 await this.$store.dispatch('loader/setLoader', true);
+
                 const params = new FormData();
                 params.append('name', this.name);
+
                 const res = await this.api('post', '/api/task_list', params);
+
                 if (res.status === 200) {
                     this.lists.push({
                         id: res.data.id,
@@ -73,31 +76,39 @@
                     await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
                     await this.$store.dispatch('snackbar/setColor', 'error');
                 }
+
                 await this.$store.dispatch('loader/setLoader', false);
             },
-            clickAddTask(task) {
+            async clickAddTask(taskList, task) {
+                await this.$store.dispatch('loader/setLoader', true);
+
                 const params = new FormData();
-                params.append('name', task.name);
-                const res = this.api('post', '/api/task', params);
+                params.append('task_list_id', taskList.id)
+                params.append('name', task.name)
+
+                const res = await this.api('post', '/api/task', params);
+
                 if (res.status === 200) {
-                    // this.variant = 'primary'
-                    // this.snackbarText = this.getMessages(res.data.messages)
-                    // this.snackbar = true
-                    // this.users.unshift(res.data.users)
-                    // alert(this.getMessages(res.data.messages))
+                    for(let i in this.lists) {
+                        if (this.lists[i].id === res.data.task_list_id) {
+                            this.lists[i].tasks.push({
+                                id: res.data.id,
+                                task_list_id: res.data.task_list_id,
+                                name: res.data.name,
+                            })
+                        }
+                    }
                 } else if (res.status === 422) {
-                    // this.variant = 'error'
-                    // this.snackbarText = this.getMessages(res.data.errors)
-                    // this.snackbar = true
-                    // alert(this.getMessages(res.data.errors))
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
                 } else {
-                    // this.variant = 'error'
-                    // this.snackbarText = this.getMessages([res.data.message])
-                    // this.snackbar = true
-                    // alert(this.getMessages([res.data.message]))
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
                 }
 
-                // this.tasks.push(task);
+                await this.$store.dispatch('loader/setLoader', false);
             }
         }
     }
