@@ -9,9 +9,14 @@ use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\TaskList;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 final class TaskListRepository implements TaskListRepositoryInterface
 {
+    /** @var array */
+    private $relations = ['tasks'];
+
     /**
      * @inheritDoc
      */
@@ -23,5 +28,14 @@ final class TaskListRepository implements TaskListRepositoryInterface
         }
 
         return $taskList;
+    }
+
+    /**
+     * @return Builder[]|Collection
+     */
+    public function findAll()
+    {
+        return TaskList::with($this->relations)
+            ->get();
     }
 }
