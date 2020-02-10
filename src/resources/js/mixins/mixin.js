@@ -21,32 +21,35 @@ export default {
                 console.log('url >> ' + url)
                 console.log(params)
             }
-            let config = {}
-            if (method === 'post') {
-                config = {
-                    method: method,
-                    url: url,
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest"
-                    },
-                    data: params
-                }
-            } else if (method === 'get') {
-                config = {
-                    method: method,
-                    url: url,
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest"
-                    },
-                    params: params
-                }
+
+            let config = {
+                method: null,
+                url: url,
+                headers: {"X-Requested-With": "XMLHttpRequest"},
+                data: null
+            }
+
+            if (method === 'post' || method === 'get') {
+                config.method = method
+                config.data = params
+            } else if (method === 'put') {
+                params.append('_method', 'PUT');
+                config.method = method
+                config.data = params
+            } else if (method === 'delete') {
+                params.append('_method', 'DELETE');
+                config.method = method
+                config.data = params
             } else {
                 throw 'api error'
             }
+
             const response = await axios(config).then(onSuccess).catch(onError)
+
             if (debug) {
                 console.log('response >> ' + JSON.stringify(response))
             }
+
             return response
         },
         getMessages(messages) {
