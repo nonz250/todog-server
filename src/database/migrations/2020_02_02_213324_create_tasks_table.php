@@ -15,11 +15,14 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('task_list_id')->index()->comment('タスクリストID');
-            $table->bigInteger('user_id')->index()->comment('ユーザーID');
+            $table->unsignedBigInteger('task_list_id')->index()->comment('タスクリストID');
+            $table->unsignedBigInteger('user_id')->index()->comment('ユーザーID');
             $table->string('name', 255)->comment('タスク名');
             $table->bigInteger('status')->default(0)->index()->comment('状態');
             $table->timestamps();
+
+            $table->foreign('task_list_id')->references('id')->on('tasks');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
