@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-app-bar fixed>
-            <v-app-bar-nav-icon @click="childDrawerControl"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon @click="childDrawerControl"/>
 
             <v-toolbar-title>Todog</v-toolbar-title>
 
@@ -11,9 +11,9 @@
                 color="primary"
                 absolute
                 bottom
-            ></v-progress-linear>
+            />
 
-            <v-spacer></v-spacer>
+            <v-spacer/>
 
             <v-btn icon @click="reload">
                 <v-icon>mdi-refresh</v-icon>
@@ -89,7 +89,7 @@
 
         </v-app-bar>
 
-        <nav-drawer-component ref="drawer"></nav-drawer-component>
+        <nav-drawer-component ref="drawer"/>
 
     </div>
 </template>
