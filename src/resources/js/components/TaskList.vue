@@ -150,4 +150,11 @@
         /* TODO: ここのカード高は使ってみて決める */
         /* height: 80vh; */
     }
+    .draggable-item:hover {
+        cursor: grab;
+    }
+
+    .draggable-item:active {
+        cursor: grabbing;
+    }
 </style>

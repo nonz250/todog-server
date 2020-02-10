@@ -1,0 +1,9 @@
+const STATUS_DEFAULT = 0;
+const STATUS_COMPLETED = 1;
+const STATUS_DISABLED = 2;
+
+export default {
+    STATUS_DEFAULT,
+    STATUS_COMPLETED,
+    STATUS_DISABLED,
+}

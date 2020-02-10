@@ -41,6 +41,8 @@
 </template>
 
 <script>
+    import tasks from "../app/tasks";
+
     export default {
         name: "TaskListItem",
         props: {
@@ -56,32 +58,28 @@
         data() {
             return {
                 detail: false,
-                checked: false,
                 lists: [{}, {}, {}, {}, {}],
-
             }
         },
-        created() {
-            this.checked = this.task.status === 1;
+        computed: {
+            checked: {
+                get() {
+                    return this.task.status === tasks.STATUS_COMPLETED
+                },
+                set(value) {
+                    this.task.status = value ? tasks.STATUS_COMPLETED : tasks.STATUS_DEFAULT
+                }
+            }
         },
         methods: {
             change() {
-                this.$emit(
-                    'change',
-                    this.task.id,
-                    this.checked ? 1 : 0
-                )
+                this.task.status = this.checked ? tasks.STATUS_COMPLETED : tasks.STATUS_DEFAULT;
+                this.$emit('change', this.task)
             }
         }
     }
 </script>
 
 <style scoped>
-    .draggable-item:hover {
-        cursor: grab;
-    }
 
-    .draggable-item:active {
-        cursor: grabbing;
-    }
 </style>

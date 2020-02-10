@@ -38,7 +38,7 @@ final class InitTaskUseCase
     public function __invoke(UserId $userId, TaskListId $taskListId): void
     {
         $taskName = new TaskName(self::INIT_TASK_NAME_1);
-        $taskStatus = new TaskStatus(Task::STATUS_ENABLED);
+        $taskStatus = new TaskStatus(Task::STATUS_DEFAULT);
         $this->taskRepository->saveTask($userId, $taskListId, $taskName, $taskStatus);
 
         $taskName = new TaskName(self::INIT_TASK_NAME_2);

@@ -42,11 +42,7 @@
             return {
                 isDisplayInputName: false,
                 name: '',
-                lists: [
-                    {id: 1, name: 'タスクリストの設定項目', tasks: []},
-                    {id: 1, name: 'タスクリストの設定項目', tasks: []},
-                    {id: 1, name: 'タスクリストの設定項目', tasks: []},
-                ],
+                lists: [],
             }
         },
         async created() {
