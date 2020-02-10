@@ -39,10 +39,10 @@ final class InitTaskUseCase
     {
         $taskName = new TaskName(self::INIT_TASK_NAME_1);
         $taskStatus = new TaskStatus(Task::STATUS_DEFAULT);
-        $this->taskRepository->saveTask($userId, $taskListId, $taskName, $taskStatus);
+        $this->taskRepository->saveTask($taskListId, $userId, $taskName, $taskStatus);
 
         $taskName = new TaskName(self::INIT_TASK_NAME_2);
         $taskStatus = new TaskStatus(Task::STATUS_DISABLED);
-        $this->taskRepository->saveTask($userId, $taskListId, $taskName, $taskStatus);
+        $this->taskRepository->saveTask($taskListId, $userId, $taskName, $taskStatus);
     }
 }
