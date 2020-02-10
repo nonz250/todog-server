@@ -17,5 +17,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::post('/task', '\App\Http\Actions\CreateTaskAction');
+    Route::post('/task', '\App\Domain\UseCase\Task\CreateTaskUseCase');
 });
