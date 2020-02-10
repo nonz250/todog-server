@@ -31,7 +31,7 @@ class Task extends Model
         return $this->fill([
             'task_list_id' => $taskListId->toInt(),
             'user_id' => $userId->toInt(),
-            'name' => $taskName,
+            'name' => (string)$taskName,
             'status' => $taskStatus->toInt(),
         ])->save();
     }

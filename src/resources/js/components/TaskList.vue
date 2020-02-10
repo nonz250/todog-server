@@ -10,14 +10,14 @@
             <v-list>
 
                 <draggable
-                    v-model="tasks"
+                    v-model="taskList.tasks"
                     group="group"
                     @start="drag=true"
                     @end="drag=false"
                     :options="{animation: 200}"
                     :disabled="!enabled"
                 >
-                    <div v-for="(task, index) in tasks" :key="index">
+                    <div v-for="(task, index) in taskList.tasks" :key="index">
 
                         <task-list-item :task="task" local-class="draggable-item" @change="change"/>
 
@@ -65,7 +65,7 @@
                 </template>
 
                 <v-list>
-                    <v-list-item v-for="(list, index) in lists" :key="index" @click="">
+                    <v-list-item v-for="(list, index) in taskList" :key="index" @click="">
                         <v-list-item-title>{{list.name + index}}</v-list-item-title>
                     </v-list-item>
                 </v-list>
@@ -110,30 +110,15 @@
         props: {
             taskList: {
                 type: Object,
+                required: true,
                 default: {},
-            },
+            }
         },
         data() {
             return {
                 isAdd: false,
                 detail: false,
                 enabled: true,
-                lists: [
-                    {value: 1, name: 'タスクリストの設定項目'},
-                    {value: 1, name: 'タスクリストの設定項目'},
-                    {value: 1, name: 'タスクリストの設定項目'},
-                ],
-                tasks: [
-                    {id: 1, name: 'ここにタスクが表示される', status: 0},
-                    {id: 2, name: 'ここにタスクが表示される', status: 1},
-                    {id: 3, name: 'ここにタスクが表示される', status: 1},
-                    {id: 4, name: 'ここにタスクが表示される', status: 1},
-                    {id: 5, name: 'ここにタスクが表示される', status: 0},
-                    {id: 6, name: 'ここにタスクが表示される', status: 1},
-                    {id: 7, name: 'ここにタスクが表示される', status: 1},
-                    {id: 8, name: 'ここにタスクが表示される', status: 0},
-                    {id: 9, name: 'ここにタスクが表示される', status: 0},
-                ],
                 taskName: '',
             }
         },
@@ -147,12 +132,12 @@
                     id: null,
                     name: this.taskName,
                 };
-                this.$emit('clickAddTask', task);
+                this.$emit('clickAddTask', this.taskList, task);
             },
             change(id, status) {
-                for (let i in this.tasks) {
-                    if (this.tasks[i].id === id) {
-                        this.tasks[i].status = status;
+                for (let i in this.taskList.tasks) {
+                    if (this.taskList.tasks[i].id === id) {
+                        this.taskList.tasks[i].status = status;
                     }
                 }
             },
