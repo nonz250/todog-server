@@ -4,4 +4,10 @@ cp .htaccess src/.htaccess
 
 cp .env src/.env
 
+cd src/
+
+php -v
+
+php artisan passport:key
+
 exit
