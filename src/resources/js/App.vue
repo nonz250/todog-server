@@ -1,15 +1,33 @@
 <template>
     <v-app>
-        <nav-component></nav-component>
+        <nav-component/>
         <transition mode="out-in">
-            <router-view></router-view>
+            <router-view/>
         </transition>
+        <v-snackbar v-model="snackbar"
+                    :color="this.$store.getters['snackbar/color']"
+                    :top="this.$store.getters['snackbar/position'] === 'top'"
+                    vertical
+        >
+            {{this.$store.getters['snackbar/text']}}
+            <v-btn text @click="snackbar = false">閉じる</v-btn>
+        </v-snackbar>
     </v-app>
 </template>
 
 <script>
     export default {
-        name: "App.vue"
+        name: "App.vue",
+        computed: {
+            snackbar: {
+                get() {
+                    return this.$store.getters['snackbar/snackbar']
+                },
+                set(value) {
+                    this.$store.dispatch('snackbar/setSnackbar', value)
+                }
+            }
+        }
     }
 </script>
 
