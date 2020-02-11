@@ -28,8 +28,12 @@
                 </template>
 
                 <v-list>
-                    <v-list-item v-for="(item, index) in lists" :key="index" @click="">
-                        <v-list-item-title>タスクの設定項目{{index}}</v-list-item-title>
+                    <v-list-item
+                        v-for="(operation, index) in operationLists"
+                        :key="index"
+                        @click="clickOperation(operation.operation)"
+                    >
+                        <v-list-item-title :class="getItemClass(operation.color)">{{operation.name}}</v-list-item-title>
                     </v-list-item>
                 </v-list>
 
@@ -58,7 +62,13 @@
         data() {
             return {
                 detail: false,
-                lists: [{}, {}, {}, {}, {}],
+                operationLists: [
+                    {
+                        name: '削除',
+                        color: 'error',
+                        operation: 'delete'
+                    }
+                ],
             }
         },
         computed: {
@@ -83,6 +93,18 @@
             change() {
                 this.task.status = this.checked ? tasks.STATUS_COMPLETED : tasks.STATUS_DEFAULT;
                 this.$emit('change', this.task)
+            },
+            clickOperation(operation) {
+                if (operation === 'delete') {
+                    this.$emit('delete', this.task);
+                } else {
+                    console.error('この操作はありません。');
+                }
+            },
+            getItemClass(color) {
+                return {
+                    'red--text': color === 'error',
+                }
             }
         }
     }
