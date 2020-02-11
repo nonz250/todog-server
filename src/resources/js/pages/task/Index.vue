@@ -95,6 +95,7 @@
                     this.lists.push({
                         id: res.data.id,
                         name: res.data.name,
+                        tasks: [],
                     });
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
