@@ -39,7 +39,7 @@
                 v-show="isAdd === false"
                 text
                 outlined
-                @click="isAdd = true"
+                @click="clickEnabledTaskForm"
             >
                 <v-icon>mdi-plus-circle-outline</v-icon>
                 タスクを追加する
@@ -75,12 +75,14 @@
             <v-textarea
                 v-show="isAdd === true"
                 v-model="taskName"
+                ref="input-task"
                 class="float-left"
                 label="タスク"
                 rows="2"
                 maxlength="255"
                 counter
                 full-width
+                auto-grow
             />
 
             <v-btn
@@ -134,6 +136,13 @@
                 };
                 this.taskName = '';
                 this.$emit('clickAddTask', this.taskList, task);
+            },
+            clickEnabledTaskForm() {
+                this.isAdd = true;
+                const vm = this;
+                this.$nextTick(() => {
+                    vm.$refs['input-task'].focus();
+                });
             },
             change(task) {
                 this.$emit('change', task)
