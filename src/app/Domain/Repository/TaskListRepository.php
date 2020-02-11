@@ -4,6 +4,7 @@
 namespace App\Domain\Repository;
 
 
+use App\Domain\Collection\TaskListStatusCollection;
 use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskListName;
@@ -45,9 +46,12 @@ final class TaskListRepository implements TaskListRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findByTaskStatuses(UserId $userId, TaskStatusCollection $taskStatusCollection): Builder
-    {
-        return TaskList::findByUserId($userId)
+    public function findByTaskStatuses(
+        UserId $userId,
+        TaskListStatusCollection $taskListStatusCollection,
+        TaskStatusCollection $taskStatusCollection
+    ): Builder {
+        return TaskList::findByStatus($userId, $taskListStatusCollection)
             ->with([
                 'tasks' => function ($query) use ($taskStatusCollection) {
                     /** @var HasMany $query */
