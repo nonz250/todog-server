@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-app-bar fixed>
+        <v-app-bar fixed dense>
             <v-app-bar-nav-icon @click="childDrawerControl"/>
 
             <v-toolbar-title>Todog</v-toolbar-title>

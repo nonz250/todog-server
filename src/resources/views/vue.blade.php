@@ -14,9 +14,13 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <style>
+        html, body { height: 100%; }
+    </style>
 </head>
 <body>
-<main style="margin-top: 64px;">
+<main style="margin-top: 48px; height: 100%;">
     <div id="app">
         <app></app>
     </div>

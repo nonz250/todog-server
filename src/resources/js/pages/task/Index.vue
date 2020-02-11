@@ -1,46 +1,44 @@
 <template>
-    <div>
-        <ul class="horizontal-list">
-            <li class="task-list" v-for="(list, index) in lists" :key="index">
-                <task-list
-                    :task-list="list"
-                    @clickAddTask="clickAddTask"
-                    @change="change"
-                    @delete-list="deleteList"
-                    @delete-task="deleteTask"
-                />
-            </li>
-            <li class="task-list">
-                <v-btn text
-                       outlined
-                       block
-                       class="add-list-container"
-                       :color="isDisplayInputName ? 'error' : 'primary'"
-                       @click="clickChangeIsDisplayInputName"
-                >
+    <ul class="horizontal-list">
+        <li class="task-list" v-for="(list, index) in lists" :key="index">
+            <task-list
+                :task-list="list"
+                @clickAddTask="clickAddTask"
+                @change="change"
+                @delete-list="deleteList"
+                @delete-task="deleteTask"
+            />
+        </li>
+        <li class="task-list">
+            <v-btn text
+                   outlined
+                   block
+                   class="add-list-container"
+                   :color="isDisplayInputName ? 'error' : 'primary'"
+                   @click="clickChangeIsDisplayInputName"
+            >
                     <span v-show="!isDisplayInputName">
                         <v-icon>mdi-plus-circle-outline</v-icon>
                         リストを追加する
                     </span>
-                    <span v-show="isDisplayInputName">
+                <span v-show="isDisplayInputName">
                         <v-icon>mdi-minus-circle-outline</v-icon>
                         キャンセル
                     </span>
-                </v-btn>
-                <v-text-field v-show="isDisplayInputName" v-model="name" ref="input-task-list" placeholder="タスクリスト名"/>
-                <v-btn v-show="isDisplayInputName"
-                       color="primary"
-                       text
-                       outlined
-                       class="float-right"
-                       @click="clickAddList"
-                >
-                    <v-icon>mdi-plus-circle-outline</v-icon>
-                    追加
-                </v-btn>
-            </li>
-        </ul>
-    </div>
+            </v-btn>
+            <v-text-field v-show="isDisplayInputName" v-model="name" ref="input-task-list" placeholder="タスクリスト名"/>
+            <v-btn v-show="isDisplayInputName"
+                   color="primary"
+                   text
+                   outlined
+                   class="float-right"
+                   @click="clickAddList"
+            >
+                <v-icon>mdi-plus-circle-outline</v-icon>
+                追加
+            </v-btn>
+        </li>
+    </ul>
 </template>
 
 <script>
@@ -251,6 +249,7 @@
         -webkit-overflow-scrolling: touch;
         margin: 0;
         padding: 0;
+        height: 100%;
     }
 
     .task-list {
