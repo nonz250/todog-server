@@ -113,6 +113,8 @@
                         name: res.data.name,
                         tasks: [],
                     });
+                    this.isDisplayInputName = false;
+                    this.name = null;
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
