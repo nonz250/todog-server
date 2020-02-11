@@ -46,8 +46,8 @@ interface TaskRepositoryInterface
      * @param TaskId $taskId
      * @param UserId $userId
      * @param TaskStatus $taskStatus
-     * @return bool
+     * @return Builder
      * @throws Exception
      */
-    public function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): bool;
+    public function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): Builder;
 }

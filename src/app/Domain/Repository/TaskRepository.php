@@ -47,12 +47,12 @@ final class TaskRepository implements TaskRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): bool
+    public function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): Builder
     {
         $result = Task::updateStatus($taskId, $userId, $taskStatus);
         if ($result === false) {
             throw new Exception('タスクの削除に失敗しました。');
         }
-        return $result;
+        return Task::findById($taskId);
     }
 }
