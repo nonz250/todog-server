@@ -70,8 +70,7 @@ final class TaskListRepository implements TaskListRepositoryInterface
      */
     public function updateStatusById(TaskListId $taskListId, UserId $userId, TaskListStatus $taskListStatus): Builder
     {
-        $result = TaskList::updateStatusById($taskListId, $userId, $taskListStatus);
-        if ($result === false) {
+        if (TaskList::updateStatusById($taskListId, $userId, $taskListStatus) === false) {
             throw new Exception('タスクリストの更新に失敗しました。');
         }
         return TaskList::findById($taskListId, $userId)

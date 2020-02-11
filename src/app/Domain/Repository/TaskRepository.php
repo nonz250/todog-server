@@ -11,7 +11,6 @@ use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\Task;
-use App\Models\TaskList;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -84,7 +83,7 @@ final class TaskRepository implements TaskRepositoryInterface
         return $this->findByTaskListId($taskListId, $userId)
             ->whereIn('status', $taskStatusCollection->toArray())
             ->update([
-                'status' => TaskList::STATUS_DISABLED
+                'status' => Task::STATUS_DISABLED,
             ]);
     }
 }
