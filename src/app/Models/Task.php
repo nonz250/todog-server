@@ -80,7 +80,7 @@ class Task extends Model
      * @param TaskStatus $taskStatus
      * @return bool
      */
-    public static function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): bool
+    public static function updateStatusById(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): bool
     {
         return self::firstOrNew([
             'id' => $taskId->toInt(),
@@ -88,5 +88,16 @@ class Task extends Model
         ])->fill([
             'status' => $taskStatus->toInt(),
         ])->save();
+    }
+
+    /**
+     * @param TaskListId $taskListId
+     * @param UserId $userId
+     * @return Builder
+     */
+    public static function findByTaskListId(TaskListId $taskListId, UserId $userId): Builder
+    {
+        return self::where('task_list_id', $taskListId->toInt())
+            ->where('user_id', $userId->toInt());
     }
 }

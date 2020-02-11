@@ -4,6 +4,7 @@
 namespace App\Domain\Repository;
 
 
+use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
@@ -49,5 +50,29 @@ interface TaskRepositoryInterface
      * @return Builder
      * @throws Exception
      */
-    public function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): Builder;
+    public function updateStatusById(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): Builder;
+
+    /**
+     * @param TaskListId $taskListId
+     * @param UserId $userId
+     * @return Builder
+     */
+    public function findByTaskListId(TaskListId $taskListId, UserId $userId): Builder;
+
+    /**
+     * @param TaskId $taskId
+     * @param UserId $userId
+     * @return Builder
+     * @throws Exception
+     */
+    public function deleteById(TaskId $taskId, UserId $userId): Builder;
+
+    /**
+     * @param TaskListId $taskListId
+     * @param UserId $userId
+     * @param TaskStatusCollection $taskStatus
+     * @return int
+     * @throws Exception
+     */
+    public function deleteByTaskListId(TaskListId $taskListId, UserId $userId, TaskStatusCollection $taskStatus): int;
 }

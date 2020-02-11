@@ -5,6 +5,7 @@ namespace App\Domain\Repository;
 
 
 use App\Domain\Collection\TaskStatusCollection;
+use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\UserId;
@@ -52,6 +53,39 @@ final class TaskListRepository implements TaskListRepositoryInterface
                     /** @var HasMany $query */
                     $query->whereIn('status', $taskStatusCollection->toArray());
                 }
+            ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findById(TaskListId $taskListId, UserId $userId): Builder
+    {
+        return TaskList::findById($taskListId, $userId)
+            ->with($this->relations);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateStatusById(TaskListId $taskListId, UserId $userId, TaskListStatus $taskListStatus): Builder
+    {
+        $result = TaskList::updateStatusById($taskListId, $userId, $taskListStatus);
+        if ($result === false) {
+            throw new Exception('タスクリストの更新に失敗しました。');
+        }
+        return TaskList::findById($taskListId, $userId)
+            ->with($this->relations);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteById(TaskListId $taskListId, UserId $userId): int
+    {
+        return TaskList::findById($taskListId, $userId)
+            ->update([
+                'status' => TaskList::STATUS_DISABLED,
             ]);
     }
 }
