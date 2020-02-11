@@ -39,10 +39,13 @@ final class DeleteTaskUseCase
         $taskId = new TaskId($id);
         $userId = new UserId(Auth::id());
         $taskStatus = new TaskStatus(Task::STATUS_DISABLED);
-        $this->taskRepository->updateStatus($taskId, $userId, $taskStatus);
+        $task = $this->taskRepository
+            ->updateStatus($taskId, $userId, $taskStatus)
+            ->first();
         return response()->json([
             'result' => true,
-            'id' => $taskId->toInt(),
+            'id' => $task->getAttribute('id'),
+            'task_list_id' => $task->getAttribute('task_list_id'),
         ]);
     }
 }
