@@ -132,6 +132,7 @@
                     id: null,
                     name: this.taskName,
                 };
+                this.taskName = '';
                 this.$emit('clickAddTask', this.taskList, task);
             },
             change(task) {
@@ -146,6 +147,7 @@
         /* TODO: ここのカード高は使ってみて決める */
         /* height: 80vh; */
     }
+
     .draggable-item:hover {
         cursor: grab;
     }
