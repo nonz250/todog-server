@@ -4,6 +4,7 @@
 namespace App\Domain\Repository;
 
 
+use App\Domain\Collection\TaskListStatusCollection;
 use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskListName;
@@ -33,10 +34,15 @@ interface TaskListRepositoryInterface
 
     /**
      * @param UserId $userId
+     * @param TaskListStatusCollection $taskListStatusCollection
      * @param TaskStatusCollection $taskStatusCollection
      * @return Builder
      */
-    public function findByTaskStatuses(UserId $userId, TaskStatusCollection $taskStatusCollection): Builder;
+    public function findByTaskStatuses(
+        UserId $userId,
+        TaskListStatusCollection $taskListStatusCollection,
+        TaskStatusCollection $taskStatusCollection
+    ): Builder;
 
     /**
      * @param TaskListId $taskListId

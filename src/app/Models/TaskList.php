@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Domain\Collection\TaskStatusCollection;
+use App\Domain\Collection\TaskListStatusCollection;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListStatus;
-use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -52,6 +51,17 @@ class TaskList extends Model
     public static function findByUserId(UserId $userId): Builder
     {
         return self::where('user_id', $userId->toInt());
+    }
+
+    /**
+     * @param UserId $userId
+     * @param TaskListStatusCollection $taskListStatusCollection
+     * @return Builder
+     */
+    public static function findByStatus(UserId $userId, TaskListStatusCollection $taskListStatusCollection): Builder
+    {
+        return self::findByUserId($userId)
+            ->whereIn('status', $taskListStatusCollection->toArray());
     }
 
     /**

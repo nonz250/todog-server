@@ -42,7 +42,7 @@ final class InitTaskUseCase
         $this->taskRepository->saveTask($taskListId, $userId, $taskName, $taskStatus);
 
         $taskName = new TaskName(self::INIT_TASK_NAME_2);
-        $taskStatus = new TaskStatus(Task::STATUS_DISABLED);
+        $taskStatus = new TaskStatus(Task::STATUS_COMPLETED);
         $this->taskRepository->saveTask($taskListId, $userId, $taskName, $taskStatus);
     }
 }
