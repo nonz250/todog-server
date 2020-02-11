@@ -4,8 +4,15 @@
 namespace App\Domain\UseCase\TaskList;
 
 
+use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\Repository\TaskListRepositoryInterface;
+use App\Domain\ValueObject\QueryParamTaskStatus;
+use App\Domain\ValueObject\TaskStatus;
+use App\Domain\ValueObject\UserId;
+use App\Http\Requests\GetTaskListRequest;
+use App\Models\Task;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 final class GetTaskListUseCase
 {
@@ -25,11 +32,27 @@ final class GetTaskListUseCase
     }
 
     /**
+     * @param GetTaskListRequest $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
-    public function __invoke(): JsonResponse
+    public function __invoke(GetTaskListRequest $request): JsonResponse
     {
-        $taskLists = $this->taskListRepository->findAll();
+        $userId = new UserId(Auth::id());
+        $queryStatus = new QueryParamTaskStatus($request->get('status'));
+
+        if ($queryStatus->isEnable()) {
+            $taskStatuses = new TaskStatusCollection([
+                new TaskStatus(Task::STATUS_DEFAULT),
+                new TaskStatus(Task::STATUS_COMPLETED),
+            ]);
+            $taskLists = $this->taskListRepository->findByTaskStatuses($userId, $taskStatuses)->get();
+        } elseif ($queryStatus->isDisabled()) {
+            $taskLists = $this->taskListRepository->findAll($userId)->get();
+        } else {
+            $taskLists = $this->taskListRepository->findAll($userId)->get();
+        }
+
         $results = [];
 
         foreach ($taskLists as $taskList) {

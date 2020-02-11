@@ -4,13 +4,13 @@
 namespace App\Domain\Repository;
 
 
+use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\TaskList;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
 interface TaskListRepositoryInterface
 {
@@ -24,7 +24,16 @@ interface TaskListRepositoryInterface
     public function saveTaskList(UserId $userId, TaskListName $taskListName, TaskListStatus $taskListStatus): TaskList;
 
     /**
-     * @return Builder[]|Collection
+     * @param UserId $userId
+     * @return Builder
+     * @throws Exception
      */
-    public function findAll();
+    public function findAll(UserId $userId): Builder;
+
+    /**
+     * @param UserId $userId
+     * @param TaskStatusCollection $taskStatusCollection
+     * @return Builder
+     */
+    public function findByTaskStatuses(UserId $userId, TaskStatusCollection $taskStatusCollection): Builder;
 }
