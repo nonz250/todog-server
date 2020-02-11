@@ -68,24 +68,26 @@
 
             </v-list>
 
+            <div class="text-right">
+                <v-btn
+                    text
+                    outlined
+                    :color="isAdd ? 'error' : 'primary'"
+                    @click="clickEnabledTaskForm"
+                >
+                    <v-icon v-show="!isAdd">mdi-plus-circle-outline</v-icon>
+                    <span v-show="!isAdd">タスクを追加する</span>
+
+                    <v-icon v-show="isAdd">mdi-minus-circle-outline</v-icon>
+                    <span v-show="isAdd">キャンセル</span>
+                </v-btn>
+            </div>
+
         </v-card-text>
 
-        <v-card-actions>
-
-            <v-spacer v-show="isAdd === false"/>
-
-            <v-btn
-                v-show="isAdd === false"
-                text
-                outlined
-                @click="clickEnabledTaskForm"
-            >
-                <v-icon>mdi-plus-circle-outline</v-icon>
-                タスクを追加する
-            </v-btn>
+        <v-card-actions v-show="isAdd">
 
             <v-textarea
-                v-show="isAdd === true"
                 v-model="taskName"
                 ref="input-task"
                 class="float-left"
@@ -98,7 +100,6 @@
             />
 
             <v-btn
-                v-show="isAdd === true"
                 color="success"
                 class="float-left"
                 text
@@ -157,7 +158,7 @@
                 this.$emit('clickAddTask', this.taskList, task);
             },
             clickEnabledTaskForm() {
-                this.isAdd = true;
+                this.isAdd = !this.isAdd;
                 const vm = this;
                 this.$nextTick(() => {
                     vm.$refs['input-task'].focus();
