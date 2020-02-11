@@ -19,6 +19,7 @@ Route::middleware('auth:api')->group(function () {
     });
     Route::get('/task_list', '\App\Domain\UseCase\TaskList\GetTaskListUseCase');
     Route::post('/task_list', '\App\Domain\UseCase\TaskList\CreateTaskListUseCase');
+    Route::delete('/task_list/{id}', '\App\Domain\UseCase\TaskList\DeleteTaskListUseCase');
 
     Route::post('/task', '\App\Domain\UseCase\Task\CreateTaskUseCase');
     Route::put('/task/{id}', '\App\Domain\UseCase\Task\UpdateTaskUseCase');

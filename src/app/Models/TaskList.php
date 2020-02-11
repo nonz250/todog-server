@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Domain\Collection\TaskStatusCollection;
+use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\TaskStatus;
@@ -51,5 +52,35 @@ class TaskList extends Model
     public static function findByUserId(UserId $userId): Builder
     {
         return self::where('user_id', $userId->toInt());
+    }
+
+    /**
+     * @param TaskListId $taskListId
+     * @param UserId $userId
+     * @return Builder
+     */
+    public static function findById(TaskListId $taskListId, UserId $userId): Builder
+    {
+        return self::where('id', $taskListId->toInt())
+            ->where('user_id', $userId->toInt());
+    }
+
+    /**
+     * @param TaskListId $taskListId
+     * @param UserId $userId
+     * @param TaskListStatus $taskListStatus
+     * @return bool
+     */
+    public static function updateStatusById(
+        TaskListId $taskListId,
+        UserId $userId,
+        TaskListStatus $taskListStatus
+    ): bool {
+        return self::firstOrNew([
+            'id' => $taskListId->toInt(),
+            'user_id' => $userId->toInt(),
+        ])->fill([
+            'status' => $taskListStatus->toInt(),
+        ])->save();
     }
 }
