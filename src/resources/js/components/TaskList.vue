@@ -1,7 +1,45 @@
 <template>
     <v-card>
 
-        <v-card-title>{{taskList.name}}</v-card-title>
+        <v-card-title>
+            <v-row>
+                <v-col style="margin: 0 0 0 1rem; padding: 0;">{{taskList.name}}</v-col>
+                <v-col class="my-0 py-0">
+                    <v-menu
+                        v-show="isAdd === false"
+                        v-model="detail"
+                        transition="slide-x-transition"
+                        absolute
+                        left
+                        bottom
+                    >
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-show="isAdd === false"
+                                text
+                                icon
+                                class="float-right"
+                                v-on="on"
+                            >
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                            </v-btn>
+                        </template>
+
+                        <v-list>
+                            <v-list-item
+                                v-for="(operation, index) in operationLists"
+                                :key="index"
+                                @click="clickOperation(operation.operation)"
+                            >
+                                <v-list-item-title :class="getItemClass(operation.color)">{{operation.name}}
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+
+                    </v-menu>
+                </v-col>
+            </v-row>
+        </v-card-title>
 
         <v-divider/>
 
@@ -45,33 +83,6 @@
                 <v-icon>mdi-plus-circle-outline</v-icon>
                 タスクを追加する
             </v-btn>
-
-            <v-menu
-                v-show="isAdd === false"
-                v-model="detail"
-                transition="slide-x-transition"
-                absolute
-                left
-                bottom
-            >
-                <template v-slot:activator="{ on }">
-                    <v-btn
-                        v-show="isAdd === false"
-                        text
-                        icon
-                        v-on="on"
-                    >
-                        <v-icon>mdi-dots-horizontal</v-icon>
-                    </v-btn>
-                </template>
-
-                <v-list>
-                    <v-list-item v-for="(list, index) in taskList" :key="index" @click="">
-                        <v-list-item-title>{{list.name + index}}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-
-            </v-menu>
 
             <v-textarea
                 v-show="isAdd === true"
@@ -123,6 +134,13 @@
                 detail: false,
                 enabled: true,
                 taskName: '',
+                operationLists: [
+                    {
+                        name: '削除',
+                        color: 'error',
+                        operation: 'delete'
+                    }
+                ],
             }
         },
         created() {
@@ -145,11 +163,23 @@
                     vm.$refs['input-task'].focus();
                 });
             },
+            clickOperation(operation) {
+                if (operation === 'delete') {
+                    this.$emit('delete-list', this.taskList);
+                } else {
+                    console.error('この操作はありません。');
+                }
+            },
             change(task) {
                 this.$emit('change', task)
             },
             deleteTask(task) {
-                this.$emit('delete', task);
+                this.$emit('delete-task', task);
+            },
+            getItemClass(color) {
+                return {
+                    'red--text': color === 'error',
+                }
             }
         }
     }
