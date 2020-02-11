@@ -2,7 +2,13 @@
     <div>
         <ul class="horizontal-list">
             <li class="task-list" v-for="(list, index) in lists" :key="index">
-                <task-list :task-list="list" @clickAddTask="clickAddTask" @change="change" @delete="deleteTask"/>
+                <task-list
+                    :task-list="list"
+                    @clickAddTask="clickAddTask"
+                    @change="change"
+                    @delete-list="deleteList"
+                    @delete-task="deleteTask"
+                />
             </li>
             <li class="task-list">
                 <v-btn text
@@ -191,6 +197,33 @@
                                     this.lists[i].tasks.splice(j, 1);
                                 }
                             }
+                        }
+                    }
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+
+                await this.$store.dispatch('loader/setLoader', false);
+            },
+            async deleteList(taskList) {
+                await this.$store.dispatch('loader/setLoader', true);
+
+                const params = new FormData();
+
+                const res = await this.api('delete', '/api/task_list/' + taskList.id, params);
+
+                const taskListId = Number(res.data.id);
+
+                if (res.status === 200) {
+                    for (let i in this.lists) {
+                        if (Number(this.lists[i].id) === taskListId) {
+                            this.lists.splice(i, 1);
                         }
                     }
                 } else if (res.status === 422) {
