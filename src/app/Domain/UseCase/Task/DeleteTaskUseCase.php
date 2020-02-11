@@ -42,6 +42,7 @@ final class DeleteTaskUseCase
         $this->taskRepository->updateStatus($taskId, $userId, $taskStatus);
         return response()->json([
             'result' => true,
+            'id' => $taskId->toInt(),
         ]);
     }
 }
