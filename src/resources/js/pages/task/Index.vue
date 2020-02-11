@@ -186,7 +186,6 @@
     .task-list {
         display: inline-block;
         vertical-align: top;
-        height: 100vh;
         margin: 0;
         padding: 1rem;
     }
