@@ -34,7 +34,7 @@ interface TaskRepositoryInterface
      * @return Builder
      * @throws Exception
      */
-    public static function updateTask(
+    public function updateTask(
         TaskId $taskId,
         TaskListId $taskListId,
         UserId $userId,

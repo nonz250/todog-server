@@ -57,9 +57,9 @@ class Task extends Model
     ): bool {
         return self::firstOrNew([
             'id' => $taskId->toInt(),
+            'user_id' => $userId->toInt(),
         ])->fill([
             'task_list_id' => $taskListId->toInt(),
-            'user_id' => $userId->toInt(),
             'name' => (string) $taskName,
             'status' => $taskStatus->toInt(),
         ])->save();
