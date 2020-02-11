@@ -10,7 +10,7 @@
                        block
                        class="add-list-container"
                        :color="isDisplayInputName ? 'error' : 'primary'"
-                       @click="isDisplayInputName = !isDisplayInputName"
+                       @click="clickChangeIsDisplayInputName"
                 >
                     <span v-show="!isDisplayInputName">
                         <v-icon>mdi-plus-circle-outline</v-icon>
@@ -21,7 +21,7 @@
                         キャンセル
                     </span>
                 </v-btn>
-                <v-text-field v-show="isDisplayInputName" v-model="name" placeholder="タスクリスト名"/>
+                <v-text-field v-show="isDisplayInputName" v-model="name" ref="input-task-list" placeholder="タスクリスト名"/>
                 <v-btn v-show="isDisplayInputName"
                        color="primary"
                        text
@@ -57,6 +57,13 @@
             click() {
                 const loader = this.$store.getters['loader/loader'];
                 this.$store.dispatch('loader/setLoader', !loader);
+            },
+            clickChangeIsDisplayInputName() {
+                this.isDisplayInputName = !this.isDisplayInputName;
+                const vm = this;
+                this.$nextTick(() => {
+                    vm.$refs['input-task-list'].focus();
+                });
             },
             async getTaskLists() {
                 await this.$store.dispatch('loader/setLoader', true);
