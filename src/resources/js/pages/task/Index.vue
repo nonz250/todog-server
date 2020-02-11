@@ -1,5 +1,8 @@
 <template>
-    <ul class="horizontal-list">
+    <ul class="horizontal-list"
+        @touchstart="dbClickScrollToNext"
+        @touchend="waitTouch"
+    >
         <li class="task-list" v-for="(list, index) in lists" :key="index">
             <task-list
                 :task-list="list"
@@ -55,6 +58,11 @@
                 isDisplayInputName: false,
                 name: '',
                 lists: [],
+                touch: {
+                    enabled: false,
+                    current: 0,
+                    distance: 0,
+                }
             }
         },
         async created() {
@@ -277,7 +285,39 @@
                 }
 
                 await this.$store.dispatch('loader/setLoader', false);
-            }
+            },
+            dbClickScrollToNext(e) {
+                if (this.touch.enabled) {
+
+                    const x = Number(e.changedTouches[0].pageX);
+                    const fullX = Number(window.innerWidth);
+                    const range = Math.ceil(fullX * 0.2);
+
+                    console.log(x)
+                    console.log(fullX - x)
+                    console.log(range)
+
+                    if (x < range) {
+                        const base = 70;
+                        window.scrollBy(1000, 0);
+                        console.log('left click')
+                    }
+                    if ((fullX - x) < range) {
+                        const base = 70;
+                        window.scrollBy(1000, 0);
+                        console.log('right click')
+                    }
+                    this.touch.enabled = false;
+                } else {
+                    this.touch.enabled = true;
+                }
+            },
+            waitTouch(e) {
+                const vm = this;
+                setTimeout(function () {
+                    vm.touch.enabled = false;
+                }, 1000 * 2);
+            },
         }
     }
 </script>
