@@ -1,5 +1,5 @@
 <template>
-    <v-card class="card-max-height">
+    <v-card>
 
         <v-card-title>{{taskList.name}}</v-card-title>
 
@@ -152,11 +152,6 @@
 </script>
 
 <style scoped>
-    .card-max-height {
-        /* TODO: ここのカード高は使ってみて決める */
-        /* height: 80vh; */
-    }
-
     .draggable-item:hover {
         cursor: grab;
     }
