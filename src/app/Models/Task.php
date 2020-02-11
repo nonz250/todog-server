@@ -73,4 +73,20 @@ class Task extends Model
     {
         return self::where('id', $taskId->toInt());
     }
+
+    /**
+     * @param TaskId $taskId
+     * @param UserId $userId
+     * @param TaskStatus $taskStatus
+     * @return bool
+     */
+    public static function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): bool
+    {
+        return self::firstOrNew([
+            'id' => $taskId->toInt(),
+            'user_id' => $userId->toInt(),
+        ])->fill([
+            'status' => $taskStatus->toInt(),
+        ])->save();
+    }
 }

@@ -41,4 +41,13 @@ interface TaskRepositoryInterface
         TaskName $taskName,
         TaskStatus $taskStatus
     ): Builder;
+
+    /**
+     * @param TaskId $taskId
+     * @param UserId $userId
+     * @param TaskStatus $taskStatus
+     * @return bool
+     * @throws Exception
+     */
+    public function updateStatus(TaskId $taskId, UserId $userId, TaskStatus $taskStatus): bool;
 }
