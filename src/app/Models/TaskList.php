@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListStatus;
+use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class TaskList extends Model
@@ -39,5 +42,14 @@ class TaskList extends Model
             'name' => (string) $taskListName,
             'status' => $taskListStatus->toInt(),
         ])->save();
+    }
+
+    /**
+     * @param UserId $userId
+     * @return Builder
+     */
+    public static function findByUserId(UserId $userId): Builder
+    {
+        return self::where('user_id', $userId->toInt());
     }
 }

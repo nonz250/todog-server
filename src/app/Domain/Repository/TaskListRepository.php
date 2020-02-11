@@ -4,13 +4,14 @@
 namespace App\Domain\Repository;
 
 
+use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\TaskList;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class TaskListRepository implements TaskListRepositoryInterface
 {
@@ -31,11 +32,26 @@ final class TaskListRepository implements TaskListRepositoryInterface
     }
 
     /**
-     * @return Builder[]|Collection
+     * @param UserId $userId
+     * @return Builder
      */
-    public function findAll()
+    public function findAll(UserId $userId): Builder
     {
-        return TaskList::with($this->relations)
-            ->get();
+        return TaskList::findByUserId($userId)
+            ->with($this->relations);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findByTaskStatuses(UserId $userId, TaskStatusCollection $taskStatusCollection): Builder
+    {
+        return TaskList::findByUserId($userId)
+            ->with([
+                'tasks' => function ($query) use ($taskStatusCollection) {
+                    /** @var HasMany $query */
+                    $query->whereIn('status', $taskStatusCollection->toArray());
+                }
+            ]);
     }
 }
