@@ -1,6 +1,6 @@
 <template>
     <v-list-item
-        :class="localClass"
+        :class="listClass"
     >
         <v-list-item-action>
             <v-checkbox v-model="checked" @change="change"/>
@@ -62,6 +62,14 @@
             }
         },
         computed: {
+            listClass() {
+                let result = {};
+                result[this.localClass] = true;
+                if (this.checked) {
+                    result['bg-color-checked'] = true;
+                }
+                return result;
+            },
             checked: {
                 get() {
                     return this.task.status === tasks.STATUS_COMPLETED
@@ -81,5 +89,7 @@
 </script>
 
 <style scoped>
-
+    .bg-color-checked {
+        background-color: #cccccc;
+    }
 </style>
