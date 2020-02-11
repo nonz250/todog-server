@@ -26,12 +26,16 @@ export default {
                 method: null,
                 url: url,
                 headers: {"X-Requested-With": "XMLHttpRequest"},
-                data: null
+                data: null,
+                params: null,
             }
 
-            if (method === 'post' || method === 'get') {
+            if (method === 'post') {
                 config.method = method
                 config.data = params
+            } else if (method === 'get') {
+                config.method = method
+                config.params = params
             } else if (method === 'put') {
                 params.append('_method', 'PUT');
                 config.method = 'post'
