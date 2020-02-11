@@ -190,11 +190,6 @@
         padding: 1rem;
     }
 
-    .card-max-height {
-        /* TODO: ここのカード高は使ってみて決める */
-        /* height: 80vh; */
-    }
-
     .add-list-container {
         border: dashed 2px #000000;
     }
