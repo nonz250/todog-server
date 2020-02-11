@@ -9,7 +9,7 @@
                        outlined
                        block
                        class="add-list-container"
-                       color="primary"
+                       :color="isDisplayInputName ? 'error' : 'primary'"
                        @click="isDisplayInputName = !isDisplayInputName"
                 >
                     <span v-show="!isDisplayInputName">
