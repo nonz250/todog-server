@@ -26,7 +26,7 @@
                 set(value) {
                     this.$store.dispatch('snackbar/setSnackbar', value)
                 }
-            }
+            },
         }
     }
 </script>

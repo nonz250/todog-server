@@ -41,6 +41,16 @@
 
         </v-list-item-action>
 
+        <dialog-component :dialog="dialog"
+                          :title="title"
+                          :ok="ok"
+                          :cancel="cancel"
+                          @ok="clickDelete"
+                          @cancel="dialog = false"
+        >
+            <div v-html="text"></div>
+        </dialog-component>
+
     </v-list-item>
 </template>
 
@@ -61,10 +71,20 @@
         },
         data() {
             return {
+                dialog: false,
+                title: '',
+                text: '',
+                ok: {color: 'default', text: ''},
+                cancel: {color: 'default', text: 'キャンセル'},
                 detail: false,
                 operationLists: [
                     {
-                        name: '削除',
+                        name: 'タスクを編集',
+                        color: '',
+                        operation: 'edit'
+                    },
+                    {
+                        name: 'タスクを削除',
                         color: 'error',
                         operation: 'delete'
                     }
@@ -96,10 +116,18 @@
             },
             clickOperation(operation) {
                 if (operation === 'delete') {
-                    this.$emit('delete', this.task);
+                    this.dialog = true;
+                    this.title = 'タスク削除';
+                    this.text = 'タスクを削除しますか？<br>この操作は元には戻せません。';
+                    this.ok.text = '削除';
+                    this.ok.color = 'error';
                 } else {
                     console.error('この操作はありません。');
                 }
+            },
+            clickDelete() {
+                this.dialog = false;
+                this.$emit('delete', this.task);
             },
             getItemClass(color) {
                 return {
