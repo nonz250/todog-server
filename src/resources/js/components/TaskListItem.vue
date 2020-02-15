@@ -79,11 +79,6 @@
                 detail: false,
                 operationLists: [
                     {
-                        name: 'タスクを編集',
-                        color: '',
-                        operation: 'edit'
-                    },
-                    {
                         name: 'タスクを削除',
                         color: 'error',
                         operation: 'delete'
