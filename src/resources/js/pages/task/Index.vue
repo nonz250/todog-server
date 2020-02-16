@@ -6,6 +6,7 @@
                 @clickAddTask="clickAddTask"
                 @change="change"
                 @delete-list="deleteList"
+                @update-task="updateTask"
                 @delete-task="deleteTask"
             />
         </li>
@@ -178,6 +179,9 @@
                 }
 
                 await this.$store.dispatch('loader/setLoader', false);
+            },
+            async updateTask(task) {
+              console.log(task)
             },
             async deleteTask(task) {
                 await this.$store.dispatch('loader/setLoader', true);
