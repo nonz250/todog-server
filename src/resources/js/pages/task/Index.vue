@@ -181,7 +181,33 @@
                 await this.$store.dispatch('loader/setLoader', false);
             },
             async updateTask(task) {
-              console.log(task)
+                await this.$store.dispatch('loader/setLoader', true);
+
+                const params = new FormData();
+
+                const res = await this.api('put', '/api/task/' + task.id, params);
+
+                if (res.status === 200) {
+                    // for (let i in this.lists) {
+                    //     if (Number(this.lists[i].id) === taskListId) {
+                    //         for (let j in this.lists[i].tasks) {
+                    //             if (Number(this.lists[i].tasks[j].id) === taskId) {
+                    //                 this.lists[i].tasks.splice(j, 1);
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+
+                await this.$store.dispatch('loader/setLoader', false);
             },
             async deleteTask(task) {
                 await this.$store.dispatch('loader/setLoader', true);
@@ -190,10 +216,10 @@
 
                 const res = await this.api('delete', '/api/task/' + task.id, params);
 
-                const taskId = Number(res.data.id);
-                const taskListId = Number(res.data.task_list_id);
-
                 if (res.status === 200) {
+                    const taskId = Number(res.data.id);
+                    const taskListId = Number(res.data.task_list_id);
+
                     for (let i in this.lists) {
                         if (Number(this.lists[i].id) === taskListId) {
                             for (let j in this.lists[i].tasks) {
