@@ -142,6 +142,7 @@
                 }
             },
             clickUpdate() {
+                this.isEdit = false;
                 this.$emit('update', this.task);
             },
             clickDelete() {
