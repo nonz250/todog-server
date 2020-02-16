@@ -4,6 +4,7 @@
 namespace App\Domain\Repository;
 
 
+use App\Domain\Collection\TaskIdCollection;
 use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskListId;
@@ -13,6 +14,7 @@ use App\Domain\ValueObject\UserId;
 use App\Models\Task;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 interface TaskRepositoryInterface
 {
@@ -66,6 +68,14 @@ interface TaskRepositoryInterface
      * @throws Exception
      */
     public function deleteById(TaskId $taskId, UserId $userId): Builder;
+
+    /**
+     * @param TaskIdCollection $taskIdCollection
+     * @param UserId $userId
+     * @return TaskIdCollection
+     * @throws Exception
+     */
+    public function deleteByIdCollection(TaskIdCollection $taskIdCollection, UserId $userId): TaskIdCollection;
 
     /**
      * @param TaskListId $taskListId

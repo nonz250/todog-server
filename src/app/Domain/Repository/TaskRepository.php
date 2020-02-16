@@ -4,6 +4,7 @@
 namespace App\Domain\Repository;
 
 
+use App\Domain\Collection\TaskIdCollection;
 use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskListId;
@@ -13,6 +14,7 @@ use App\Domain\ValueObject\UserId;
 use App\Models\Task;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 final class TaskRepository implements TaskRepositoryInterface
 {
@@ -70,6 +72,25 @@ final class TaskRepository implements TaskRepositoryInterface
     public function deleteById(TaskId $taskId, UserId $userId): Builder
     {
         return $this->updateStatusById($taskId, $userId, new TaskStatus(Task::STATUS_DISABLED));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteByIdCollection(TaskIdCollection $taskIdCollection, UserId $userId): TaskIdCollection
+    {
+        $taskIds = new TaskIdCollection();
+        foreach ($taskIdCollection as $taskId) {
+            $taskIds->push(
+                new TaskId(
+                    (int) $this
+                        ->updateStatusById($taskId, $userId, new TaskStatus(Task::STATUS_DISABLED))
+                        ->first('id')
+                        ->getAttribute('id')
+                )
+            );
+        }
+        return $taskIds;
     }
 
     /**

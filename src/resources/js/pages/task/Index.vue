@@ -8,6 +8,7 @@
                 @delete-list="deleteList"
                 @update-task="updateTask"
                 @delete-task="deleteTask"
+                @archive-tasks="archiveTasks"
             />
         </li>
         <li class="task-list">
@@ -138,11 +139,7 @@
                 if (res.status === 200) {
                     for (let i in this.lists) {
                         if (this.lists[i].id === res.data.task_list_id) {
-                            this.lists[i].tasks.push({
-                                id: res.data.id,
-                                task_list_id: res.data.task_list_id,
-                                name: res.data.name,
-                            })
+                            this.lists[i].tasks.push(res.data)
                         }
                     }
                 } else if (res.status === 422) {
@@ -219,12 +216,50 @@
 
                 const res = await this.api('delete', '/api/task_list/' + taskList.id, params);
 
-                const taskListId = Number(res.data.id);
-
                 if (res.status === 200) {
+                    const taskListId = Number(res.data.id);
+
                     for (let i in this.lists) {
                         if (Number(this.lists[i].id) === taskListId) {
                             this.lists.splice(i, 1);
+                        }
+                    }
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+
+                await this.$store.dispatch('loader/setLoader', false);
+            },
+            async archiveTasks(taskIds) {
+                await this.$store.dispatch('loader/setLoader', true);
+
+                if (taskIds.length === 0) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', '完了したタスクがありません。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                    await this.$store.dispatch('loader/setLoader', false);
+                    return;
+                }
+
+                const params = new FormData();
+
+                const res = await this.api('post', '/api/archive/task/' + taskIds, params);
+
+                if (res.status === 200) {
+                    const taskIds = res.data.task_ids;
+                    for (let i in this.lists) {
+                        for (let j in this.lists[i].tasks) {
+                            for (let k in taskIds) {
+                                if (Number(taskIds[k]) === Number(this.lists[i].tasks[j].id)) {
+                                    this.lists[i].tasks.splice(j, 1);
+                                }
+                            }
                         }
                     }
                 } else if (res.status === 422) {

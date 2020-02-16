@@ -24,4 +24,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/task', '\App\Domain\UseCase\Task\CreateTaskUseCase');
     Route::put('/task/{id}', '\App\Domain\UseCase\Task\UpdateTaskUseCase');
     Route::delete('/task/{id}', '\App\Domain\UseCase\Task\DeleteTaskUseCase');
+
+    Route::post('/archive/task/{ids}', '\App\Domain\UseCase\Task\ArchiveTaskUseCase');
 });
