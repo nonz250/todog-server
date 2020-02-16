@@ -29,6 +29,7 @@
                 <v-btn
                     :color="ok.color"
                     text
+                    :disabled="disabled"
                     @click="clickOk"
                 >
                     {{ok.text}}
@@ -65,6 +66,12 @@
                     return {color: 'default', text: 'キャンセル'};
                 }
             },
+            disabled: {
+                type: Boolean,
+                default: function () {
+                    return false;
+                }
+            }
         },
         methods: {
             clickOk() {

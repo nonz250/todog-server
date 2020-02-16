@@ -44,6 +44,7 @@ class CreateTaskUseCase
             'id' => $task->getAttribute('id'),
             'task_list_id' => $task->getAttribute('task_list_id'),
             'name' => $task->getAttribute('name'),
+            'status' => $task->getAttribute('status'),
         ]);
     }
 }

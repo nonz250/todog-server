@@ -116,6 +116,18 @@
             </v-btn>
 
         </v-card-actions>
+
+        <dialog-component :dialog="dialog"
+                          :title="title"
+                          :ok="ok"
+                          :cancel="cancel"
+                          :disabled="!isExistCompletedTasks"
+                          @ok="archiveTasks"
+                          @cancel="dialog = false"
+        >
+            <div v-html="text"></div>
+        </dialog-component>
+
     </v-card>
 
 </template>
@@ -123,6 +135,7 @@
 <script>
     import draggableComponent from 'vuedraggable';
     import isMobile from 'ismobilejs';
+    import tasks from "../app/tasks";
 
     export default {
         name: "TaskList",
@@ -137,20 +150,41 @@
         data() {
             return {
                 isAdd: false,
+                dialog: false,
+                title: '',
+                text: '',
+                ok: {color: 'default', text: ''},
+                cancel: {color: 'default', text: 'キャンセル'},
                 detail: false,
                 enabled: true,
                 taskName: '',
                 operationLists: [
                     {
-                        name: '削除',
+                        name: '完了タスクを削除',
                         color: 'error',
-                        operation: 'delete'
-                    }
+                        operation: 'archive',
+                    },
+                    {
+                        name: 'リストを削除',
+                        color: 'error',
+                        operation: 'delete',
+                    },
                 ],
             }
         },
         created() {
             this.enabled = !isMobile(navigator.userAgent).any
+        },
+        computed: {
+            isExistCompletedTasks() {
+                const completedTasks = [];
+                for (let i in this.taskList.tasks) {
+                    if (this.taskList.tasks[i].status === tasks.STATUS_COMPLETED) {
+                        completedTasks.push(this.taskList.tasks[i]);
+                    }
+                }
+                return completedTasks.length > 0;
+            }
         },
         methods: {
             clickAddTask() {
@@ -172,6 +206,12 @@
             clickOperation(operation) {
                 if (operation === 'delete') {
                     this.$emit('delete-list', this.taskList);
+                } else if (operation === 'archive') {
+                    this.title = '完了タスクを削除';
+                    this.text = '完了タスクを削除します。<br>削除されたタスクはゴミ箱で確認できます。';
+                    this.ok.text = '削除';
+                    this.ok.color = 'error';
+                    this.dialog = true;
                 } else {
                     console.error('この操作はありません。');
                 }
@@ -184,6 +224,16 @@
             },
             deleteTask(task) {
                 this.$emit('delete-task', task);
+            },
+            archiveTasks() {
+                this.dialog = false;
+                const taskIds = [];
+                for (let i in this.taskList.tasks) {
+                    if (this.taskList.tasks[i].status === tasks.STATUS_COMPLETED) {
+                        taskIds.push(this.taskList.tasks[i].id);
+                    }
+                }
+                this.$emit('archive-tasks', taskIds);
             },
             getItemClass(color) {
                 return {
