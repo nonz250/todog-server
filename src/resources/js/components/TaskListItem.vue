@@ -7,7 +7,16 @@
         </v-list-item-action>
 
         <v-list-item-content>
-            {{task.name}}
+            <span v-show="!isEdit">{{task.name}}</span>
+            <v-text-field v-model="task.name" v-show="isEdit" ref="edit-task"/>
+            <v-btn v-show="isEdit" color="primary" text outlined @click="clickUpdate">
+                <v-icon>mdi-plus-circle-outline</v-icon>
+                更新
+            </v-btn>
+            <v-btn v-show="isEdit" color="error" text outlined @click="isEdit = false">
+                <v-icon>mdi-minus-circle-outline</v-icon>
+                キャンセル
+            </v-btn>
         </v-list-item-content>
 
         <v-list-item-action>
@@ -71,6 +80,7 @@
         },
         data() {
             return {
+                isEdit: false,
                 dialog: false,
                 title: '',
                 text: '',
@@ -78,6 +88,11 @@
                 cancel: {color: 'default', text: 'キャンセル'},
                 detail: false,
                 operationLists: [
+                    {
+                        name: 'タスクを編集',
+                        color: '',
+                        operation: 'edit'
+                    },
                     {
                         name: 'タスクを削除',
                         color: 'error',
@@ -116,9 +131,18 @@
                     this.text = 'タスクを削除しますか？<br>この操作は元には戻せません。';
                     this.ok.text = '削除';
                     this.ok.color = 'error';
+                } else if (operation === 'edit') {
+                    this.isEdit = true;
+                    const vm = this;
+                    this.$nextTick(() => {
+                        vm.$refs['edit-task'].focus();
+                    });
                 } else {
                     console.error('この操作はありません。');
                 }
+            },
+            clickUpdate() {
+                this.$emit('update', this.task);
             },
             clickDelete() {
                 this.dialog = false;

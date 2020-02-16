@@ -57,8 +57,13 @@
                 >
                     <div v-for="(task, index) in taskList.tasks" :key="index">
 
-                        <task-list-item :task="task" local-class="draggable-item" @change="change"
-                                        @delete="deleteTask"/>
+                        <task-list-item
+                            :task="task"
+                            local-class="draggable-item"
+                            @change="change"
+                            @update="updateTask"
+                            @delete="deleteTask"
+                        />
 
                         <v-divider/>
 
@@ -173,6 +178,9 @@
             },
             change(task) {
                 this.$emit('change', task)
+            },
+            updateTask(task) {
+                this.$emit('update-task', task);
             },
             deleteTask(task) {
                 this.$emit('delete-task', task);
