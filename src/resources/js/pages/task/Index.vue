@@ -4,7 +4,7 @@
             <task-list
                 :task-list="list"
                 @clickAddTask="clickAddTask"
-                @change="change"
+                @change="updateTask"
                 @delete-list="deleteList"
                 @update-task="updateTask"
                 @delete-task="deleteTask"
@@ -157,7 +157,7 @@
 
                 await this.$store.dispatch('loader/setLoader', false);
             },
-            async change(task) {
+            async updateTask(task) {
                 await this.$store.dispatch('loader/setLoader', true);
 
                 const params = new FormData();
@@ -168,35 +168,6 @@
                 const res = await this.api('put', '/api/task/' + task.id, params);
 
                 if (res.status === 200) {
-                } else if (res.status === 422) {
-                    await this.$store.dispatch('snackbar/setSnackbar', true);
-                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
-                    await this.$store.dispatch('snackbar/setColor', 'error');
-                } else {
-                    await this.$store.dispatch('snackbar/setSnackbar', true);
-                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
-                    await this.$store.dispatch('snackbar/setColor', 'error');
-                }
-
-                await this.$store.dispatch('loader/setLoader', false);
-            },
-            async updateTask(task) {
-                await this.$store.dispatch('loader/setLoader', true);
-
-                const params = new FormData();
-
-                const res = await this.api('put', '/api/task/' + task.id, params);
-
-                if (res.status === 200) {
-                    // for (let i in this.lists) {
-                    //     if (Number(this.lists[i].id) === taskListId) {
-                    //         for (let j in this.lists[i].tasks) {
-                    //             if (Number(this.lists[i].tasks[j].id) === taskId) {
-                    //                 this.lists[i].tasks.splice(j, 1);
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
