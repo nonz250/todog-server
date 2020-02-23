@@ -11,6 +11,9 @@ routes = routes.concat(test.routes);
 import task from "../routes/task";
 routes = routes.concat(task.routes);
 
+import login from "../routes/login";
+routes = routes.concat(login.routes);
+
 export default new VueRouter({
     mode: 'history',
     routes
