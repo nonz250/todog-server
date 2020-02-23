@@ -1,6 +1,8 @@
 <template>
     <v-app>
-        <nav-component/>
+        <nav-component
+            :is-logged-in="isLoggedIn"
+        />
         <transition mode="out-in">
             <router-view/>
         </transition>
@@ -16,9 +18,15 @@
 </template>
 
 <script>
+    import mixin from "./mixins/mixin";
+
     export default {
         name: "App.vue",
+        mixins: [mixin],
         computed: {
+            isLoggedIn() {
+                return Object.keys(this.$store.getters['auth/user']).length > 0;
+            },
             snackbar: {
                 get() {
                     return this.$store.getters['snackbar/snackbar']
@@ -27,6 +35,26 @@
                     this.$store.dispatch('snackbar/setSnackbar', value)
                 }
             },
+        },
+        async created() {
+            const res = await this.api('get', '/api/user', {});
+
+            if (res.status === 200) {
+                await this.$store.dispatch('auth/setUser', res.data);
+            } else if (res.status === 401) {
+                await this.$router.push('login');
+            }
+
+            // const user = this.$store.getters['auth/user'];
+            // if (Object.keys(user).length === 0) {
+            //     if (this.isLoggedIn) {
+            // ログイン
+            // const user = await this.api('get', '/api/user', {});
+            // await this.$store.dispatch('auth/currentUser');
+            // } else {
+            //     await this.$router.push('login');
+            // }
+            // }
         }
     }
 </script>

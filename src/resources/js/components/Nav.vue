@@ -1,7 +1,10 @@
 <template>
     <div>
         <v-app-bar fixed dense>
-            <v-app-bar-nav-icon @click="childDrawerControl"/>
+            <v-app-bar-nav-icon
+                v-if="isLoggedIn"
+                @click="childDrawerControl"
+            />
 
             <v-toolbar-title>Todog</v-toolbar-title>
 
@@ -56,8 +59,14 @@
                 offset-y
             >
 
-                <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on">
+                <template
+                    v-slot:activator="{ on }"
+                >
+                    <v-btn
+                        v-show="isLoggedIn"
+                        icon
+                        v-on="on"
+                    >
                         <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
                 </template>
@@ -70,19 +79,19 @@
                             </v-col>
                         </v-row>
                     </v-container>
-<!--                    <v-container>-->
-<!--                        <v-row>-->
-<!--                            <v-col class="flex text-sm-center">-->
-<!--                                <v-btn icon @click="toSetting">-->
-<!--                                    <v-icon x-large>mdi-wrench</v-icon>-->
-<!--                                </v-btn>-->
-<!--                            </v-col>-->
-<!--                            <v-col class="flex text-sm-center">-->
-<!--                            </v-col>-->
-<!--                            <v-col class="flex text-sm-center">-->
-<!--                            </v-col>-->
-<!--                        </v-row>-->
-<!--                    </v-container>-->
+                    <!--                    <v-container>-->
+                    <!--                        <v-row>-->
+                    <!--                            <v-col class="flex text-sm-center">-->
+                    <!--                                <v-btn icon @click="toSetting">-->
+                    <!--                                    <v-icon x-large>mdi-wrench</v-icon>-->
+                    <!--                                </v-btn>-->
+                    <!--                            </v-col>-->
+                    <!--                            <v-col class="flex text-sm-center">-->
+                    <!--                            </v-col>-->
+                    <!--                            <v-col class="flex text-sm-center">-->
+                    <!--                            </v-col>-->
+                    <!--                        </v-row>-->
+                    <!--                    </v-container>-->
                 </v-card>
 
             </v-menu>
@@ -98,7 +107,15 @@
 
     export default {
         name: "Nav",
-        // mixins: [],
+        props: {
+            isLoggedIn: {
+                type: Boolean,
+                require: true,
+                default: function () {
+                    return true;
+                }
+            }
+        },
         data() {
             return {
                 toolMenu: false,
