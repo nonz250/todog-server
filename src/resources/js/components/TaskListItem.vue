@@ -8,7 +8,17 @@
 
         <v-list-item-content>
             <span v-show="!isEdit">{{task.name}}</span>
-            <v-text-field v-model="task.name" v-show="isEdit" ref="edit-task"/>
+            <v-textarea
+                v-model="task.name"
+                v-show="isEdit"
+                ref="edit-task"
+                label="タスク"
+                rows="2"
+                maxlength="255"
+                counter
+                full-width
+                auto-grow
+            />
             <v-btn v-show="isEdit" color="primary" text outlined @click="clickUpdate">
                 <v-icon>mdi-plus-circle-outline</v-icon>
                 更新
