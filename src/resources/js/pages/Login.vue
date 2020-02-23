@@ -1,51 +1,60 @@
 <template>
     <form action="/login" method="post">
-        <v-card>
-            <v-card-title>ログイン</v-card-title>
-            <v-card-text>
-                <v-text-field
-                    name="email"
-                    tabindex="1"
-                    clearable
-                    persistent-hint
-                    prepend-inner-icon="mdi-email"
-                    hint="todog@example.com"
-                    :loading="this.$store.getters['loader/loader']"
-                    :rules="[rules.required, rules.email]"
-                />
-                <v-text-field
-                    name="password"
-                    tabindex="2"
-                    type="password"
-                    clearable
-                    persistent-hint
-                    prepend-inner-icon="mdi-lock-question"
-                    :counter="counter"
-                    :loading="this.$store.getters['loader/loader']"
-                    :rules="[rules.required, rules.counter]"
-                />
-            </v-card-text>
-            <v-card-actions>
-                <v-btn
-                    text
-                    outlined
-                    to="/"
-                >TOPページへ戻る
-                </v-btn>
+        <v-container>
+            <v-row justify="center">
+                <v-col>
+                    <v-card
+                        tile
+                        outlined
+                    >
+                        <v-card-title>ログイン</v-card-title>
+                        <v-card-text>
+                            <v-text-field
+                                name="email"
+                                tabindex="1"
+                                clearable
+                                persistent-hint
+                                prepend-inner-icon="mdi-email"
+                                hint="todog@example.com"
+                                :loading="this.$store.getters['loader/loader']"
+                                :rules="[rules.required, rules.email]"
+                            />
+                            <v-text-field
+                                name="password"
+                                tabindex="2"
+                                type="password"
+                                clearable
+                                persistent-hint
+                                prepend-inner-icon="mdi-lock-question"
+                                :counter="counter"
+                                :loading="this.$store.getters['loader/loader']"
+                                :rules="[rules.required, rules.counter]"
+                            />
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn
+                                text
+                                outlined
+                                to="/"
+                            >TOPページへ戻る
+                            </v-btn>
 
-                <v-spacer/>
+                            <v-spacer/>
 
-                <input type="hidden" name="_token" :value="token"/>
-                <v-btn
-                    type="submit"
-                    text
-                    outlined
-                    color="primary"
-                    @click="login"
-                >ログイン
-                </v-btn>
-            </v-card-actions>
-        </v-card>
+                            <input type="hidden" name="_token" :value="token"/>
+                            <v-btn
+                                type="submit"
+                                text
+                                outlined
+                                color="primary"
+                                @click="login"
+                            >ログイン
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
     </form>
 </template>
 
