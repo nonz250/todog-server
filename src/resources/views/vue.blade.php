@@ -15,6 +15,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+
     <!-- Icon -->
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
