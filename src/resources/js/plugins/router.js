@@ -8,6 +8,9 @@ let routes = [];
 import test from "../routes/test";
 routes = routes.concat(test.routes);
 
+import top from "../routes/top";
+routes = routes.concat(top.routes);
+
 import task from "../routes/task";
 routes = routes.concat(task.routes);
 
