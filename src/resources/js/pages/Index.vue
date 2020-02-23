@@ -11,6 +11,7 @@
                     text
                     outlined
                     color="success"
+                    @click="install"
                 >インストール
                 </v-btn>
             </v-card-actions>
@@ -20,7 +21,29 @@
 
 <script>
     export default {
-        name: "Index"
+        name: "Index",
+        computed: {
+            debug() {
+                return process.env.NODE_ENV !== 'production';
+            }
+        },
+        methods: {
+            async install() {
+                const vm = this;
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker
+                        .register("/sw.js")
+                        .then(registration => {
+                            if (vm.debug) {
+                                console.log("ServiceWorker registered");
+                            }
+                        })
+                        .catch(error => {
+                            console.warn("ServiceWorker error", error);
+                        });
+                }
+            }
+        }
     }
 </script>
 
