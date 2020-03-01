@@ -54,9 +54,9 @@ export default {
                 console.log('response >> ' + JSON.stringify(response))
             }
 
-            if (response.status === 401) {
-                location.reload();
-            }
+            // if (response.status === 401) {
+            //     location.reload();
+            // }
 
             return response
         },
