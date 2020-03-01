@@ -37,12 +37,17 @@
             },
         },
         async created() {
+            if (this.$router.currentRoute.path === '/login') {
+                return;
+            }
+
             const res = await this.api('get', '/api/user', {});
 
             if (res.status === 200) {
                 await this.$store.dispatch('auth/setUser', res.data);
             } else if (res.status === 401) {
-                await this.$router.push('login');
+                location.reload();
+                // await this.$router.push('login');
             }
 
             // const user = this.$store.getters['auth/user'];
