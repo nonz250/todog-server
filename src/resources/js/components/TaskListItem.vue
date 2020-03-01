@@ -6,28 +6,7 @@
             <v-checkbox v-model="checked" @change="change"/>
         </v-list-item-action>
 
-        <v-list-item-content>
-            <span v-show="!isEdit">{{task.name}}</span>
-            <v-textarea
-                v-model="task.name"
-                v-show="isEdit"
-                ref="edit-task"
-                label="タスク"
-                rows="2"
-                maxlength="255"
-                counter
-                full-width
-                auto-grow
-            />
-            <v-btn v-show="isEdit" color="primary" text outlined @click="clickUpdate">
-                <v-icon>mdi-plus-circle-outline</v-icon>
-                更新
-            </v-btn>
-            <v-btn v-show="isEdit" color="error" text outlined @click="isEdit = false">
-                <v-icon>mdi-minus-circle-outline</v-icon>
-                キャンセル
-            </v-btn>
-        </v-list-item-content>
+        <v-list-item-content>{{task.name}}</v-list-item-content>
 
         <v-list-item-action>
             <v-menu
@@ -70,11 +49,67 @@
             <div v-html="text"></div>
         </dialog-component>
 
+        <v-dialog
+            v-model="formDialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+        >
+            <v-card tile>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="formDialog = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>タスクを編集</v-toolbar-title>
+                    <v-spacer/>
+                    <v-toolbar-items>
+                        <v-btn dark text @click="clickUpdate">更新</v-btn>
+                    </v-toolbar-items>
+                </v-toolbar>
+
+                <v-list three-line subheader>
+                    <v-subheader>タスク情報</v-subheader>
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title>タスク</v-list-item-title>
+                            <v-list-item-subtitle>
+                                <v-textarea
+                                    v-model="dialogTaskName"
+                                    ref="edit-task"
+                                    label="タスク"
+                                    rows="2"
+                                    maxlength="255"
+                                    counter
+                                    full-width
+                                    auto-grow
+                                />
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <!--                    <v-list-item>-->
+                    <!--                        <v-list-item-content>-->
+                    <!--                            <v-list-item-title>タスク期限</v-list-item-title>-->
+                    <!--                            <div class="width: 290px;">-->
+                    <!--                                <v-date-picker-->
+                    <!--                                    v-model="limitDate"-->
+                    <!--                                    full-width-->
+                    <!--                                    landscape-->
+                    <!--                                    locale="ja"-->
+                    <!--                                    :day-format="date => new Date(date).getDate()"-->
+                    <!--                                />-->
+                    <!--                            </div>-->
+                    <!--                        </v-list-item-content>-->
+                    <!--                    </v-list-item>-->
+                </v-list>
+            </v-card>
+        </v-dialog>
+
     </v-list-item>
 </template>
 
 <script>
     import tasks from "../app/tasks";
+    import dayjs from "dayjs";
 
     export default {
         name: "TaskListItem",
@@ -90,10 +125,11 @@
         },
         data() {
             return {
-                isEdit: false,
                 dialog: false,
+                formDialog: false,
                 title: '',
                 text: '',
+                dialogTaskName: '',
                 ok: {color: 'default', text: ''},
                 cancel: {color: 'default', text: 'キャンセル'},
                 detail: false,
@@ -109,6 +145,7 @@
                         operation: 'delete'
                     }
                 ],
+                limitDate: dayjs().format('YYYY-MM-DD'),
             }
         },
         computed: {
@@ -142,7 +179,8 @@
                     this.ok.text = '削除';
                     this.ok.color = 'error';
                 } else if (operation === 'edit') {
-                    this.isEdit = true;
+                    this.dialogTaskName = this.task.name;
+                    this.formDialog = true;
                     const vm = this;
                     this.$nextTick(() => {
                         vm.$refs['edit-task'].focus();
@@ -152,7 +190,8 @@
                 }
             },
             clickUpdate() {
-                this.isEdit = false;
+                this.formDialog = false;
+                this.task.name = this.dialogTaskName;
                 this.$emit('update', this.task);
             },
             clickDelete() {
@@ -163,7 +202,7 @@
                 return {
                     'red--text': color === 'error',
                 }
-            }
+            },
         }
     }
 </script>
