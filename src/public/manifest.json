@@ -2,12 +2,13 @@
     "short_name": "Todog",
     "name": "Todog",
     "display": "standalone",
-    "theme_color": "#ffffff",
-    "icons": [{
-        "src": "todog-round-icon.png",
-        "type": "image/png",
-        "sizes": "48x48"
-    },
+    "theme_color": "#F5F5F5",
+    "icons": [
+        {
+            "src": "todog-round-icon.png",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
         {
             "src": "todog-round-icon.png",
             "type": "image/png",
@@ -19,6 +20,7 @@
             "sizes": "192x192"
         }
     ],
-    "start_url": "/",
+    "lang": "ja-jp",
+    "start_url": "/home",
     "gcm_sender_id": "103953800507"
 }
