@@ -46,8 +46,7 @@
             if (res.status === 200) {
                 await this.$store.dispatch('auth/setUser', res.data);
             } else if (res.status === 401) {
-                location.reload();
-                // await this.$router.push('login');
+                await this.$router.push('login');
             }
 
             // const user = this.$store.getters['auth/user'];
