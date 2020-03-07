@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Domain\Collection\UserIdCollection;
 use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
@@ -23,6 +25,11 @@ class Task extends Model
     public const STATUS_COMPLETED = 1;
     /** @var int 無効 */
     public const STATUS_DISABLED = 2;
+
+    public function token()
+    {
+        return $this->hasMany(FcmToken::class, 'user_id', 'user_id');
+    }
 
     /**
      * @param TaskListId $taskListId
@@ -76,6 +83,15 @@ class Task extends Model
     public static function findById(TaskId $taskId): Builder
     {
         return self::where('id', $taskId->toInt());
+    }
+
+    /**
+     * @param UserIdCollection $userIdCollection
+     * @return Builder
+     */
+    public static function findByIds(UserIdCollection $userIdCollection): Builder
+    {
+        return self::whereIn('user_id', $userIdCollection->toArray());
     }
 
     /**

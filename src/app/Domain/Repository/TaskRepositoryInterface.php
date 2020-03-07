@@ -1,11 +1,12 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
 
 use App\Domain\Collection\TaskIdCollection;
 use App\Domain\Collection\TaskStatusCollection;
+use App\Domain\Collection\UserIdCollection;
 use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
@@ -13,6 +14,7 @@ use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\Task;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -88,4 +90,20 @@ interface TaskRepositoryInterface
      * @throws Exception
      */
     public function deleteByTaskListId(TaskListId $taskListId, UserId $userId, TaskStatusCollection $taskStatus): int;
+
+    /**
+     * @param UserIdCollection $userIdCollection
+     * @return Collection
+     */
+    public function findByUserIds(UserIdCollection $userIdCollection): Collection;
+
+    /**
+     * @param UserIdCollection $userIdCollection
+     * @param Carbon $limitDate
+     * @return Collection
+     */
+    public function findByUserIdsAndLimitDateWithFcmToken(
+        UserIdCollection $userIdCollection,
+        Carbon $limitDate
+    ): Collection;
 }
