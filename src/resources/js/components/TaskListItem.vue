@@ -86,20 +86,20 @@
                             </v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
-                    <!--                    <v-list-item>-->
-                    <!--                        <v-list-item-content>-->
-                    <!--                            <v-list-item-title>タスク期限</v-list-item-title>-->
-                    <!--                            <div class="width: 290px;">-->
-                    <!--                                <v-date-picker-->
-                    <!--                                    v-model="limitDate"-->
-                    <!--                                    full-width-->
-                    <!--                                    landscape-->
-                    <!--                                    locale="ja"-->
-                    <!--                                    :day-format="date => new Date(date).getDate()"-->
-                    <!--                                />-->
-                    <!--                            </div>-->
-                    <!--                        </v-list-item-content>-->
-                    <!--                    </v-list-item>-->
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title>タスク期限</v-list-item-title>
+                            <div class="width: 290px;">
+                                <v-date-picker
+                                    v-model="limitDate"
+                                    full-width
+                                    landscape
+                                    locale="ja"
+                                    :day-format="date => new Date(date).getDate()"
+                                />
+                            </div>
+                        </v-list-item-content>
+                    </v-list-item>
                 </v-list>
             </v-card>
         </v-dialog>
@@ -145,10 +145,20 @@
                         operation: 'delete'
                     }
                 ],
-                limitDate: dayjs().format('YYYY-MM-DD'),
             }
         },
         computed: {
+            limitDate: {
+                get() {
+                    if (this.task.limit_date !== null) {
+                        return dayjs(this.task.limit_date).format('YYYY-MM-DD');
+                    }
+                    return dayjs().format('YYYY-MM-DD');
+                },
+                set(value) {
+                    this.task.limit_date = dayjs(value).format('YYYY-MM-DD');
+                }
+            },
             listClass() {
                 let result = {};
                 result[this.localClass] = true;
@@ -192,6 +202,7 @@
             clickUpdate() {
                 this.formDialog = false;
                 this.task.name = this.dialogTaskName;
+                this.task.limit_date = this.limitDate;
                 this.$emit('update', this.task);
             },
             clickDelete() {
