@@ -10,4 +10,6 @@ php -v
 
 php artisan passport:key
 
+php artisan migrate --force
+
 exit
