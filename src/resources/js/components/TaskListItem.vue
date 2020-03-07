@@ -220,6 +220,6 @@
 
 <style scoped>
     .bg-color-checked {
-        background-color: #cccccc;
+        background-color: #f5f5f5;
     }
 </style>

@@ -1,5 +1,7 @@
 <template>
-    <v-card>
+    <v-card
+        :color="color"
+    >
 
         <v-card-title>
             <v-row>
@@ -44,8 +46,34 @@
         <v-divider/>
 
         <v-card-text>
-
-            <v-list>
+            <v-list
+                v-show="isColorPicker === true"
+            >
+                <v-row
+                    justify="space-around"
+                >
+                    <v-color-picker
+                        v-model="color"
+                        disabled
+                        hide-canvas
+                        hide-inputs
+                        hide-mode-switch
+                        show-swatches
+                        flat
+                        :swatches="[
+                            ['#CFD8DC', '#FFCDD2', '#F0F4C3'],
+                            ['#E8EAF6', '#FBE9E7', '#EFEBE9'],
+                            ['#E3F2FD', '#FFE0B2'],
+                            ['#E0F7FA', '#FFECB3'],
+                            ['#E8F5E9', '#FFF9C4'],
+                        ]"
+                    />
+                </v-row>
+            </v-list>
+            <v-list
+                v-show="isColorPicker === false"
+                :color="color"
+            >
 
                 <draggable
                     v-model="taskList.tasks"
@@ -58,6 +86,7 @@
                     <div v-for="(task, index) in taskList.tasks" :key="index">
 
                         <task-list-item
+                            :color="color"
                             :task="task"
                             local-class="draggable-item"
                             @change="change"
@@ -73,7 +102,7 @@
 
             </v-list>
 
-            <div class="text-right">
+            <div class="text-right" v-show="isColorPicker === false">
                 <v-btn
                     text
                     outlined
@@ -85,6 +114,36 @@
 
                     <v-icon v-show="isAdd">mdi-minus-circle-outline</v-icon>
                     <span v-show="isAdd">キャンセル</span>
+                </v-btn>
+            </div>
+
+            <div class="text-right" v-show="isColorPicker === true">
+                <v-btn
+                    text
+                    outlined
+                    color="default"
+                    @click="isColorPicker = false"
+                >
+                    <v-icon>mdi-minus-circle-outline</v-icon>
+                    キャンセル
+                </v-btn>
+                <v-btn
+                    text
+                    outlined
+                    color="success"
+                    @click="resetColorPicker"
+                >
+                    <v-icon>mdi-close-circle-outline</v-icon>
+                    リセット
+                </v-btn>
+                <v-btn
+                    text
+                    outlined
+                    color="primary"
+                    @click="clickColorPicker"
+                >
+                    <v-icon>mdi-plus-circle-outline</v-icon>
+                    色を決定する
                 </v-btn>
             </div>
 
@@ -151,6 +210,8 @@
             return {
                 isAdd: false,
                 dialog: false,
+                isColorPicker: false,
+                color: '#FFFFFF',
                 title: '',
                 text: '',
                 ok: {color: 'default', text: ''},
@@ -159,6 +220,11 @@
                 enabled: true,
                 taskName: '',
                 operationLists: [
+                    {
+                        name: 'リストの色を変更',
+                        color: 'default',
+                        operation: 'color',
+                    },
                     {
                         name: '完了タスクを削除',
                         color: 'error',
@@ -174,6 +240,8 @@
         },
         created() {
             this.enabled = !isMobile(navigator.userAgent).any
+            const color = localStorage.getItem('task_list_color:' + this.taskList.id);
+            this.color = color === null ? this.color : color;
         },
         computed: {
             isExistCompletedTasks() {
@@ -212,6 +280,8 @@
                     this.ok.text = '削除';
                     this.ok.color = 'error';
                     this.dialog = true;
+                } else if (operation === 'color') {
+                    this.isColorPicker = true;
                 } else {
                     console.error('この操作はありません。');
                 }
@@ -239,6 +309,14 @@
                 return {
                     'red--text': color === 'error',
                 }
+            },
+            clickColorPicker() {
+                this.isColorPicker = false;
+                localStorage.setItem('task_list_color:' + this.taskList.id, this.color);
+            },
+            resetColorPicker() {
+                this.color = '#FFFFFF';
+                localStorage.setItem('task_list_color:' + this.taskList.id, this.color);
             }
         }
     }
