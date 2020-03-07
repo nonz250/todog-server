@@ -28,6 +28,7 @@ class UpdateTaskRequest extends FormRequest
         return [
             'task_list_id' => 'required|integer',
             'name' => 'required|string|max:255',
+            'limit_date' => 'nullable|date_format:Y-m-d',
             'status' => [
                 'required',
                 Rule::in([

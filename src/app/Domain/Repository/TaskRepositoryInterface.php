@@ -7,6 +7,7 @@ namespace App\Domain\Repository;
 use App\Domain\Collection\TaskIdCollection;
 use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskId;
+use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskStatus;
@@ -33,6 +34,7 @@ interface TaskRepositoryInterface
      * @param UserId $userId
      * @param TaskListId $taskListId
      * @param TaskName $taskName
+     * @param TaskLimitDate $taskLimitDate
      * @param TaskStatus $taskStatus
      * @return Builder
      * @throws Exception
@@ -42,6 +44,7 @@ interface TaskRepositoryInterface
         TaskListId $taskListId,
         UserId $userId,
         TaskName $taskName,
+        TaskLimitDate $taskLimitDate,
         TaskStatus $taskStatus
     ): Builder;
 

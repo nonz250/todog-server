@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Domain\ValueObject\TaskId;
+use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskStatus;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $table = 'tasks';
-    protected $fillable = ['task_list_id', 'user_id', 'name', 'status'];
+    protected $fillable = ['task_list_id', 'user_id', 'name', 'limit_date', 'status'];
     protected $guarded = ['id'];
 
     /** @var int デフォルト */
@@ -45,6 +46,7 @@ class Task extends Model
      * @param TaskListId $taskListId
      * @param UserId $userId
      * @param TaskName $taskName
+     * @param TaskLimitDate $taskLimitDate
      * @param TaskStatus $taskStatus
      * @return bool
      */
@@ -53,6 +55,7 @@ class Task extends Model
         TaskListId $taskListId,
         UserId $userId,
         TaskName $taskName,
+        TaskLimitDate $taskLimitDate,
         TaskStatus $taskStatus
     ): bool {
         return self::firstOrNew([
@@ -61,6 +64,7 @@ class Task extends Model
         ])->fill([
             'task_list_id' => $taskListId->toInt(),
             'name' => (string) $taskName,
+            'limit_date' => $taskLimitDate->format('Y/m/d'),
             'status' => $taskStatus->toInt(),
         ])->save();
     }

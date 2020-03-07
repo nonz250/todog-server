@@ -7,6 +7,7 @@ namespace App\Domain\Repository;
 use App\Domain\Collection\TaskIdCollection;
 use App\Domain\Collection\TaskStatusCollection;
 use App\Domain\ValueObject\TaskId;
+use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskStatus;
@@ -39,9 +40,10 @@ final class TaskRepository implements TaskRepositoryInterface
         TaskListId $taskListId,
         UserId $userId,
         TaskName $taskName,
+        TaskLimitDate $taskLimitDate,
         TaskStatus $taskStatus
     ): Builder {
-        if (Task::updateTask($taskId, $taskListId, $userId, $taskName, $taskStatus) === false) {
+        if (Task::updateTask($taskId, $taskListId, $userId, $taskName, $taskLimitDate, $taskStatus) === false) {
             throw new Exception('タスクの更新に失敗しました。');
         }
         return Task::findById($taskId);

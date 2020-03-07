@@ -160,6 +160,7 @@
                 const params = new FormData();
                 params.append('task_list_id', task.task_list_id);
                 params.append('name', task.name);
+                params.append('limit_date', task.limit_date);
                 params.append('status', task.status);
 
                 const res = await this.api('put', '/api/task/' + task.id, params);
