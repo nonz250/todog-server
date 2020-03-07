@@ -11,6 +11,7 @@ window.Vue = require('vue');
 import vuetify from "./plugins/vuetify";
 import router from "./plugins/router";
 import store from "./plugins/store";
+import firebase from "./plugins/firebase";
 
 /**
  * The following block of code may be used to automatically register your
@@ -41,4 +42,5 @@ const app = new Vue({
     vuetify,
     router,
     store,
+    firebase,
 });

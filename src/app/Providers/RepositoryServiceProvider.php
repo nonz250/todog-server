@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Repository\FcmTokenRepository;
+use App\Domain\Repository\FcmTokenRepositoryInterface;
 use App\Domain\Repository\TaskListRepository;
 use App\Domain\Repository\TaskListRepositoryInterface;
 use App\Domain\Repository\TaskRepository;
@@ -19,6 +21,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
         $this->app->bind(TaskListRepositoryInterface::class, TaskListRepository::class);
+        $this->app->bind(FcmTokenRepositoryInterface::class, FcmTokenRepository::class);
     }
 
     /**

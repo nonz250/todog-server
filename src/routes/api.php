@@ -26,4 +26,6 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/task/{id}', '\App\Domain\UseCase\Task\DeleteTaskUseCase');
 
     Route::post('/archive/task/{ids}', '\App\Domain\UseCase\Task\ArchiveTaskUseCase');
+
+    Route::post('/fcm_token', '\App\Domain\UseCase\FirebaseCloudMessaging\CreateFCMTokenUseCase');
 });

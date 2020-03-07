@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return view('vue');
-});
+})->name('root');
 
 Auth::routes();
 

@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
@@ -18,7 +18,7 @@ final class TaskLimitDate
      *
      * @param string $value
      */
-    public function __construct(string $value)
+    public function __construct(?string $value)
     {
         $this->value = $value;
     }
@@ -27,16 +27,22 @@ final class TaskLimitDate
      * @param string $format
      * @return string
      */
-    public function format(string $format): string
+    public function format(string $format): ?string
     {
+        if (is_null($this->value)) {
+            return null;
+        }
         return Carbon::parse($this->value)->format($format);
     }
 
     /**
      * @return Carbon
      */
-    public function toCarbon(): Carbon
+    public function toCarbon(): ?Carbon
     {
+        if (is_null($this->value)) {
+            return null;
+        }
         return Carbon::parse($this->value);
     }
 }

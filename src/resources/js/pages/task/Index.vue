@@ -45,6 +45,7 @@
 
 <script>
     import mixin from "../../mixins/mixin";
+    import dayjs from "dayjs";
 
     export default {
         name: "Index",
@@ -160,7 +161,9 @@
                 const params = new FormData();
                 params.append('task_list_id', task.task_list_id);
                 params.append('name', task.name);
-                params.append('limit_date', task.limit_date);
+                if (task.limit_date !== null) {
+                    params.append('limit_date', dayjs(task.limit_date).format('YYYY-MM-DD'));
+                }
                 params.append('status', task.status);
 
                 const res = await this.api('put', '/api/task/' + task.id, params);
