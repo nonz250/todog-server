@@ -52,7 +52,7 @@ class FcmSendService extends SendService implements FcmSendInterface
         $this
             ->url(self::SEND_URL)
             ->post()
-            ->key(config('todog.fcm.key'))
+            ->key((string) config('todog.fcm.key'))
             ->notification()
             ->to($notification->getToken())
             ->title($notification->getTitle())

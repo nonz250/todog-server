@@ -36,7 +36,7 @@ class SendFcmNotificationUseCase
         $send = new FcmSendService($this->notification);
         $contents = $send
             ->post()
-            ->key(config('todog.fcm.key'))
+            ->key((string) config('todog.fcm.key'))
             ->notification()
             ->send();
         if ($contents->success !== 1) {
