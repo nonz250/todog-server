@@ -111,10 +111,7 @@ class Kernel extends ConsoleKernel
         });
         if (config('app.env') === 'production') {
             $schedule
-                ->dailyAt(7)
-                ->dailyAt(11)
-                ->dailyAt(16)
-                ->dailyAt(20);
+                ->hourly();
         }
     }
 
