@@ -108,7 +108,7 @@ class Kernel extends ConsoleKernel
 
                 return true;
             });
-        });
+        })->hourly();
         // if (config('app.env') === 'production') {
         //     $schedule
         //         ->hourly();
