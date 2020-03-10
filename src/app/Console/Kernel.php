@@ -109,10 +109,10 @@ class Kernel extends ConsoleKernel
                 return true;
             });
         });
-        if (config('app.env') === 'production') {
-            $schedule
-                ->hourly();
-        }
+        // if (config('app.env') === 'production') {
+        //     $schedule
+        //         ->hourly();
+        // }
     }
 
     /**
