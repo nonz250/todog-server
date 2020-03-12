@@ -108,11 +108,14 @@ class Kernel extends ConsoleKernel
 
                 return true;
             });
-        })->hourly();
-        // if (config('app.env') === 'production') {
-        //     $schedule
-        //         ->hourly();
-        // }
+        });
+
+        if (config('app.env') === 'production') {
+            $schedule->when(function () {
+                $now = Carbon::now()->format('H');
+                return in_array($now, [7, 11, 15, 19, 21]);
+            });
+        }
     }
 
     /**
