@@ -61,8 +61,11 @@
                 this.$store.dispatch('reloadDialog/setReloadDialog', false);
             },
             clickReload() {
-                location.reload();
                 this.$store.dispatch('reloadDialog/setReloadDialog', false);
+                this.$store.dispatch('loader/setLoader', true)
+                this.$router.go({
+                    path: this.$router.currentRoute.path, force: true
+                });
             }
         }
     }
