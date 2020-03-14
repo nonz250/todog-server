@@ -9,6 +9,7 @@
                 @update-task="updateTask"
                 @delete-task="deleteTask"
                 @archive-tasks="archiveTasks"
+                @update-task-list="updateTaskList"
             />
         </li>
         <li class="task-list">
@@ -28,7 +29,12 @@
                         キャンセル
                     </span>
             </v-btn>
-            <v-text-field v-show="isDisplayInputName" v-model="name" ref="input-task-list" placeholder="タスクリスト名"/>
+            <v-text-field
+                v-show="isDisplayInputName"
+                v-model="name"
+                ref="input-task-list"
+                placeholder="タスクリスト名"
+            />
             <v-btn v-show="isDisplayInputName"
                    color="primary"
                    text
@@ -87,6 +93,34 @@
                             name: res.data[i].name,
                             tasks: res.data[i].tasks,
                         });
+                    }
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+
+                await this.$store.dispatch('loader/setLoader', false);
+            },
+            async updateTaskList(taskList) {
+                await this.$store.dispatch('loader/setLoader', true);
+
+                const params = new FormData();
+                params.append('name', taskList.name);
+
+                const res = await this.api('put', '/api/task_list/' + taskList.id, params);
+
+                if (res.status === 200) {
+                    for (let i in this.lists) {
+                        if (Number(res.data.id) === Number(this.lists[i].id)) {
+                            this.lists[i].name = res.data.name;
+                        }
                     }
                 } else if (res.status === 401) {
                     await this.$store.dispatch('reloadDialog/setReloadDialog', true);
@@ -294,7 +328,7 @@
                 }
 
                 await this.$store.dispatch('loader/setLoader', false);
-            }
+            },
         }
     }
 </script>

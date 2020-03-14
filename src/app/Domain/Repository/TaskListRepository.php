@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
@@ -19,6 +19,21 @@ final class TaskListRepository implements TaskListRepositoryInterface
 {
     /** @var array */
     private $relations = ['tasks'];
+
+    /**
+     * @var TaskList
+     */
+    private $model;
+
+    /**
+     * TaskListRepository constructor.
+     *
+     * @param TaskList $model
+     */
+    public function __construct(TaskList $model)
+    {
+        $this->model = $model;
+    }
 
     /**
      * @inheritDoc
@@ -72,13 +87,20 @@ final class TaskListRepository implements TaskListRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function updateStatusById(TaskListId $taskListId, UserId $userId, TaskListStatus $taskListStatus): Builder
+    public function updateById(TaskListId $taskListId, UserId $userId, TaskListName $taskListName): TaskList
     {
-        if (TaskList::updateStatusById($taskListId, $userId, $taskListStatus) === false) {
+        $taskList = $this->model->newQuery()
+            ->where('id', $taskListId->toInt())
+            ->where('user_id', $userId->toInt())
+            ->first();
+
+        if (!$taskList->fill([
+            'name' => (string) $taskListName,
+        ])->save()) {
             throw new Exception('タスクリストの更新に失敗しました。');
         }
-        return TaskList::findById($taskListId, $userId)
-            ->with($this->relations);
+
+        return $taskList;
     }
 
     /**

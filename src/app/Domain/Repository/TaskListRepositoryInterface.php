@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
@@ -54,11 +54,11 @@ interface TaskListRepositoryInterface
     /**
      * @param TaskListId $taskListId
      * @param UserId $userId
-     * @param TaskListStatus $taskListStatus
-     * @return Builder
+     * @param TaskListName $taskListName
+     * @return TaskList
      * @throws Exception
      */
-    public function updateStatusById(TaskListId $taskListId, UserId $userId, TaskListStatus $taskListStatus): Builder;
+    public function updateById(TaskListId $taskListId, UserId $userId, TaskListName $taskListName): TaskList;
 
     /**
      * @param TaskListId $taskListId
