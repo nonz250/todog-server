@@ -30,6 +30,10 @@
                                 :loading="this.$store.getters['loader/loader']"
                                 :rules="[rules.required, rules.counter]"
                             />
+                            <v-checkbox
+                                name="remember"
+                                label="ログイン状態を保持する"
+                            />
                         </v-card-text>
                         <v-card-actions>
                             <v-btn
