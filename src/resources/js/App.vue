@@ -14,6 +14,9 @@
             {{this.$store.getters['snackbar/text']}}
             <v-btn text @click="snackbar = false">閉じる</v-btn>
         </v-snackbar>
+        <reload-dialog
+            :dialog="this.$store.getters['reloadDialog/reload_dialog']"
+        />
     </v-app>
 </template>
 
@@ -46,7 +49,7 @@
             if (res.status === 200) {
                 await this.$store.dispatch('auth/setUser', res.data);
             } else if (res.status === 401) {
-                await this.$router.push('login');
+                await this.$store.dispatch('reloadDialog/setReloadDialog', true);
             }
 
             // const user = this.$store.getters['auth/user'];

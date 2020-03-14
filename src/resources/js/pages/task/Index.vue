@@ -88,6 +88,8 @@
                             tasks: res.data[i].tasks,
                         });
                     }
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
@@ -116,6 +118,8 @@
                     });
                     this.isDisplayInputName = false;
                     this.name = null;
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
@@ -143,6 +147,8 @@
                             this.lists[i].tasks.push(res.data)
                         }
                     }
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
@@ -169,6 +175,8 @@
                 const res = await this.api('put', '/api/task/' + task.id, params);
 
                 if (res.status === 200) {
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
@@ -201,6 +209,8 @@
                             }
                         }
                     }
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
@@ -228,6 +238,8 @@
                             this.lists.splice(i, 1);
                         }
                     }
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));
@@ -266,6 +278,8 @@
                             }
                         }
                     }
+                } else if (res.status === 401) {
+                    await this.$store.dispatch('reloadDialog/setReloadDialog', true);
                 } else if (res.status === 422) {
                     await this.$store.dispatch('snackbar/setSnackbar', true);
                     await this.$store.dispatch('snackbar/setText', this.getMessages(res.data.errors));

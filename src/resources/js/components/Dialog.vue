@@ -5,11 +5,12 @@
     >
         <v-card>
             <v-card-title
-                class=" grey lighten-2"
                 primary-title
             >
                 {{title}}
             </v-card-title>
+
+            <v-divider/>
 
             <v-card-text>
                 <slot></slot>
@@ -22,6 +23,7 @@
                 <v-btn
                     :color="cancel.color"
                     text
+                    outlined
                     @click="clickCancel"
                 >
                     {{cancel.text}}
@@ -29,6 +31,7 @@
                 <v-btn
                     :color="ok.color"
                     text
+                    outlined
                     :disabled="disabled"
                     @click="clickOk"
                 >
