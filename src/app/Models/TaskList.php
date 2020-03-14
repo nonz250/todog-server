@@ -74,23 +74,4 @@ class TaskList extends Model
         return self::where('id', $taskListId->toInt())
             ->where('user_id', $userId->toInt());
     }
-
-    /**
-     * @param TaskListId $taskListId
-     * @param UserId $userId
-     * @param TaskListStatus $taskListStatus
-     * @return bool
-     */
-    public static function updateStatusById(
-        TaskListId $taskListId,
-        UserId $userId,
-        TaskListStatus $taskListStatus
-    ): bool {
-        return self::firstOrNew([
-            'id' => $taskListId->toInt(),
-            'user_id' => $userId->toInt(),
-        ])->fill([
-            'status' => $taskListStatus->toInt(),
-        ])->save();
-    }
 }

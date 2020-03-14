@@ -4,9 +4,32 @@
     >
 
         <v-card-title>
-            <v-row>
-                <v-col style="margin: 0 0 0 1rem; padding: 0;">{{taskList.name}}</v-col>
-                <v-col class="my-0 py-0">
+            <v-row no-gutters>
+                <v-col cols="10">
+                    <span v-show="!isEditTaskList">{{taskList.name}}</span>
+                    <v-text-field
+                        v-show="isEditTaskList"
+                        v-model="inputTaskListName"
+                        placeholder="タスクリスト名"
+                        ref="input-task-list"
+                    />
+                    <v-btn
+                        v-show="isEditTaskList"
+                        text
+                        outlined
+                        color="success"
+                        class="float-right"
+                        @click="clickUpdateTaskList"
+                    >
+                        <v-icon>mdi-plus-circle-outline</v-icon>
+                        更新
+                    </v-btn>
+                </v-col>
+
+                <v-col
+                    class="my-0 py-0"
+                    cols="2"
+                >
                     <v-menu
                         v-show="isAdd === false"
                         v-model="detail"
@@ -209,6 +232,7 @@
         data() {
             return {
                 isAdd: false,
+                isEditTaskList: false,
                 dialog: false,
                 isColorPicker: false,
                 color: '#FFFFFF',
@@ -220,6 +244,11 @@
                 enabled: true,
                 taskName: '',
                 operationLists: [
+                    {
+                        name: 'リスト名を変更',
+                        color: 'default',
+                        operation: 'changeTaskListName',
+                    },
                     {
                         name: 'リストの色を変更',
                         color: 'default',
@@ -252,6 +281,14 @@
                     }
                 }
                 return completedTasks.length > 0;
+            },
+            inputTaskListName: {
+                get() {
+                    return this.taskList.name;
+                },
+                set(value) {
+                    this.taskList.name = value;
+                }
             }
         },
         methods: {
@@ -282,6 +319,8 @@
                     this.dialog = true;
                 } else if (operation === 'color') {
                     this.isColorPicker = true;
+                } else if (operation === 'changeTaskListName') {
+                    this.isEditTaskList = true;
                 } else {
                     console.error('この操作はありません。');
                 }
@@ -317,6 +356,11 @@
             resetColorPicker() {
                 this.color = '#FFFFFF';
                 localStorage.setItem('task_list_color:' + this.taskList.id, this.color);
+            },
+            clickUpdateTaskList() {
+                this.taskList.name = this.inputTaskListName;
+                this.isEditTaskList = false;
+                this.$emit('update-task-list', this.taskList);
             }
         }
     }
