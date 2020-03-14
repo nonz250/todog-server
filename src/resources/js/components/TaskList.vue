@@ -24,6 +24,16 @@
                         <v-icon>mdi-plus-circle-outline</v-icon>
                         更新
                     </v-btn>
+                    <v-btn
+                        v-show="isEditTaskList"
+                        text
+                        outlined
+                        class="float-right"
+                        @click="isEditTaskList = false"
+                    >
+                        <v-icon>mdi-minus-circle-outline</v-icon>
+                        キャンセル
+                    </v-btn>
                 </v-col>
 
                 <v-col
