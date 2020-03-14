@@ -8,6 +8,8 @@ use App\Domain\Repository\TaskListRepository;
 use App\Domain\Repository\TaskListRepositoryInterface;
 use App\Domain\Repository\TaskRepository;
 use App\Domain\Repository\TaskRepositoryInterface;
+use App\Domain\Repository\UserRepository;
+use App\Domain\Repository\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -22,6 +24,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
         $this->app->bind(TaskListRepositoryInterface::class, TaskListRepository::class);
         $this->app->bind(FcmTokenRepositoryInterface::class, FcmTokenRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**
