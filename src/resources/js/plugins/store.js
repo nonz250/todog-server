@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import loader from "../store/loader";
 import snackbar from "../store/snackbar";
 import auth from "../store/auth";
+import reloadDialog from "../store/reloadDialog";
 
 Vue.use(Vuex);
 
@@ -11,5 +12,6 @@ export default new Vuex.Store({
         auth,
         loader,
         snackbar,
+        reloadDialog,
     }
 });

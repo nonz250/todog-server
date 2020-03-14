@@ -26,6 +26,7 @@ import firebase from "./plugins/firebase";
 
 Vue.component('app', require('./App.vue').default);
 Vue.component('dialog-component', require('./components/Dialog.vue').default);
+Vue.component('reload-dialog', require('./components/ReloadDialog.vue').default);
 Vue.component('nav-component', require('./components/Nav.vue').default);
 Vue.component('nav-drawer-component', require('./components/NavDrawer.vue').default);
 Vue.component('task-list', require('./components/TaskList.vue').default);
