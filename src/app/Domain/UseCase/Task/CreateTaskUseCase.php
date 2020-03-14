@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\UseCase\Task;
 
@@ -34,7 +34,7 @@ class CreateTaskUseCase
     public function __invoke(CreateTaskRequest $request): JsonResponse
     {
         $userId = new UserId(Auth::id());
-        $taskListId = new TaskListId($request->get('task_list_id'));
+        $taskListId = new TaskListId((int) $request->get('task_list_id'));
         $taskName = new TaskName($request->get('name'));
         $taskStatus = new TaskStatus(Task::STATUS_DEFAULT);
 
@@ -45,6 +45,7 @@ class CreateTaskUseCase
             'task_list_id' => $task->getAttribute('task_list_id'),
             'name' => $task->getAttribute('name'),
             'limit_date' => $task->getAttribute('limit_date'),
+            'notification_start_date' => $task->getAttribute('notification_start_date'),
             'status' => $task->getAttribute('status'),
         ]);
     }

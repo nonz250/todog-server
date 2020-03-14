@@ -100,6 +100,17 @@
                             </div>
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title>通知開始</v-list-item-title>
+                            <v-text-field
+                                prefix="期限"
+                                suffix="日前から通知"
+                                v-model="notificationStartDays"
+                                :rules="[rules.notification_start_days]"
+                            />
+                        </v-list-item-content>
+                    </v-list-item>
                 </v-list>
             </v-card>
         </v-dialog>
@@ -110,6 +121,7 @@
 <script>
     import tasks from "../app/tasks";
     import dayjs from "dayjs";
+    import task from "../routes/task";
 
     export default {
         name: "TaskListItem",
@@ -130,6 +142,7 @@
                 title: '',
                 text: '',
                 dialogTaskName: '',
+                notificationStartDays: 0,
                 ok: {color: 'default', text: ''},
                 cancel: {color: 'default', text: 'キャンセル'},
                 detail: false,
@@ -145,6 +158,22 @@
                         operation: 'delete'
                     }
                 ],
+                rules: {
+                    required: value => !!value || 'この項目は必須です。',
+                    notification_start_days: value => {
+                        const number = Number(value);
+                        if (!Number.isInteger(number)) {
+                            return '数値で入力して下さい。';
+                        }
+                        return typeof Number(value) === 'number' || '数値で入力して下さい。';
+                    },
+                },
+            }
+        },
+        created() {
+            if (this.limitDate !== null) {
+                this.notificationStartDays = dayjs(this.limitDate)
+                    .diff(this.task.notification_start_date, 'day')
             }
         },
         computed: {
@@ -153,7 +182,7 @@
                     if (this.task.limit_date !== null) {
                         return dayjs(this.task.limit_date).format('YYYY-MM-DD');
                     }
-                    return dayjs().format('YYYY-MM-DD');
+                    return null;
                 },
                 set(value) {
                     this.task.limit_date = dayjs(value).format('YYYY-MM-DD');
@@ -203,6 +232,11 @@
                 this.formDialog = false;
                 this.task.name = this.dialogTaskName;
                 this.task.limit_date = this.limitDate;
+                if (this.task.limit_date !== null) {
+                    this.task.notification_start_date = dayjs(this.limitDate)
+                        .subtract(this.notificationStartDays, 'day')
+                        .format('YYYY-MM-DD');
+                }
                 this.$emit('update', this.task);
             },
             clickDelete() {

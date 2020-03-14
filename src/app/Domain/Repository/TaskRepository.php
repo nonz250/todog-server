@@ -11,6 +11,7 @@ use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
+use App\Domain\ValueObject\TaskNotificationStartDate;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\Task;
@@ -43,9 +44,19 @@ final class TaskRepository implements TaskRepositoryInterface
         UserId $userId,
         TaskName $taskName,
         TaskLimitDate $taskLimitDate,
+        TaskNotificationStartDate $taskNotificationStartDate,
         TaskStatus $taskStatus
     ): Builder {
-        if (Task::updateTask($taskId, $taskListId, $userId, $taskName, $taskLimitDate, $taskStatus) === false) {
+        if (Task::updateTask(
+                $taskId,
+                $taskListId,
+                $userId,
+                $taskName,
+                $taskLimitDate,
+                $taskNotificationStartDate,
+                $taskStatus
+            ) === false
+        ) {
             throw new Exception('タスクの更新に失敗しました。');
         }
         return Task::findById($taskId);
@@ -125,11 +136,11 @@ final class TaskRepository implements TaskRepositoryInterface
      */
     public function findByUserIdsAndLimitDateWithFcmToken(
         UserIdCollection $userIdCollection,
-        Carbon $limitDate
+        Carbon $notificationStartDate
     ): Collection {
         return Task::findByIds($userIdCollection)
             ->with(['token'])
-            ->where('limit_date', '<=', $limitDate->format('Y/m/d'))
+            ->where('notification_start_date', '<=', $notificationStartDate->format('Y/m/d'))
             ->where('status', Task::STATUS_DEFAULT)
             ->get();
     }

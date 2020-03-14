@@ -140,7 +140,6 @@
                 params.append('name', task.name)
 
                 const res = await this.api('post', '/api/task', params);
-
                 if (res.status === 200) {
                     for (let i in this.lists) {
                         if (this.lists[i].id === res.data.task_list_id) {
@@ -167,8 +166,12 @@
                 const params = new FormData();
                 params.append('task_list_id', task.task_list_id);
                 params.append('name', task.name);
+                console.log(task)
                 if (task.limit_date !== null) {
                     params.append('limit_date', dayjs(task.limit_date).format('YYYY-MM-DD'));
+                    if (task.notification_start_date !== null) {
+                        params.append('notification_start_date', task.notification_start_date);
+                    }
                 }
                 params.append('status', task.status);
 

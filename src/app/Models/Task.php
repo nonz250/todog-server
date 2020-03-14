@@ -8,6 +8,7 @@ use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
+use App\Domain\ValueObject\TaskNotificationStartDate;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +17,14 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $table = 'tasks';
-    protected $fillable = ['task_list_id', 'user_id', 'name', 'limit_date', 'status'];
+    protected $fillable = [
+        'task_list_id',
+        'user_id',
+        'name',
+        'limit_date',
+        'notification_start_date',
+        'status'
+    ];
     protected $guarded = ['id'];
 
     /** @var int デフォルト */
@@ -54,6 +62,7 @@ class Task extends Model
      * @param UserId $userId
      * @param TaskName $taskName
      * @param TaskLimitDate $taskLimitDate
+     * @param TaskNotificationStartDate $taskNotificationStartDate
      * @param TaskStatus $taskStatus
      * @return bool
      */
@@ -63,6 +72,7 @@ class Task extends Model
         UserId $userId,
         TaskName $taskName,
         TaskLimitDate $taskLimitDate,
+        TaskNotificationStartDate $taskNotificationStartDate,
         TaskStatus $taskStatus
     ): bool {
         return self::firstOrNew([
@@ -72,6 +82,7 @@ class Task extends Model
             'task_list_id' => $taskListId->toInt(),
             'name' => (string) $taskName,
             'limit_date' => $taskLimitDate->format('Y/m/d'),
+            'notification_start_date' => $taskNotificationStartDate->format('Y/m/d'),
             'status' => $taskStatus->toInt(),
         ])->save();
     }

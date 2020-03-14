@@ -11,6 +11,7 @@ use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\TaskLimitDate;
 use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskName;
+use App\Domain\ValueObject\TaskNotificationStartDate;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\Task;
@@ -37,6 +38,7 @@ interface TaskRepositoryInterface
      * @param TaskListId $taskListId
      * @param TaskName $taskName
      * @param TaskLimitDate $taskLimitDate
+     * @param TaskNotificationStartDate $taskNotificationStartDate
      * @param TaskStatus $taskStatus
      * @return Builder
      * @throws Exception
@@ -47,6 +49,7 @@ interface TaskRepositoryInterface
         UserId $userId,
         TaskName $taskName,
         TaskLimitDate $taskLimitDate,
+        TaskNotificationStartDate $taskNotificationStartDate,
         TaskStatus $taskStatus
     ): Builder;
 
