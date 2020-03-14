@@ -56,14 +56,14 @@
             transition="dialog-bottom-transition"
         >
             <v-card tile>
-                <v-toolbar dark color="primary">
-                    <v-btn icon dark @click="formDialog = false">
+                <v-toolbar class="grey lighten-4">
+                    <v-btn icon @click="formDialog = false">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
                     <v-toolbar-title>タスクを編集</v-toolbar-title>
                     <v-spacer/>
                     <v-toolbar-items>
-                        <v-btn dark text @click="clickUpdate">更新</v-btn>
+                        <v-btn text @click="clickUpdate">更新</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
 
@@ -95,6 +95,7 @@
                                     full-width
                                     landscape
                                     locale="ja"
+                                    color="grey darken-1"
                                     :day-format="date => new Date(date).getDate()"
                                 />
                             </div>
