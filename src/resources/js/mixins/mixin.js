@@ -25,7 +25,10 @@ export default {
             let config = {
                 method: null,
                 url: url,
-                headers: {"X-Requested-With": "XMLHttpRequest"},
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": document.getElementsByName('csrf-token').item(0).content
+                },
                 data: null,
                 params: null,
             }
@@ -66,6 +69,13 @@ export default {
                 results.push(messages[i]);
             }
             return results.join("\n")
+        },
+        getLaravelErrorMessages(messages) {
+            const errors = [];
+            Object.keys(messages).forEach((value) => {
+                errors.push(messages[value]);
+            });
+            return errors.join("\n");
         }
     }
 }

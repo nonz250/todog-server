@@ -1,73 +1,73 @@
 <template>
-    <form action="/login" method="post">
-        <v-container>
-            <v-row justify="center">
-                <v-col>
-                    <v-card
-                        tile
-                        outlined
-                    >
-                        <v-card-title>ログイン</v-card-title>
-                        <v-card-text>
-                            <v-text-field
-                                name="email"
-                                tabindex="1"
-                                clearable
-                                persistent-hint
-                                prepend-inner-icon="mdi-email"
-                                hint="todog@example.com"
-                                :loading="this.$store.getters['loader/loader']"
-                                :rules="[rules.required, rules.email]"
-                            />
-                            <v-text-field
-                                name="password"
-                                tabindex="2"
-                                type="password"
-                                clearable
-                                persistent-hint
-                                prepend-inner-icon="mdi-lock-question"
-                                :counter="counter"
-                                :loading="this.$store.getters['loader/loader']"
-                                :rules="[rules.required, rules.counter]"
-                            />
-                            <v-checkbox
-                                name="remember"
-                                label="ログイン状態を保持する"
-                            />
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn
-                                text
-                                outlined
-                                to="/"
-                            >TOPページへ戻る
-                            </v-btn>
+    <v-container>
+        <v-row justify="center">
+            <v-col>
+                <v-card
+                    tile
+                    outlined
+                >
+                    <v-card-title>ログイン</v-card-title>
+                    <v-card-text>
+                        <v-text-field
+                            v-model="email"
+                            tabindex="1"
+                            clearable
+                            persistent-hint
+                            prepend-inner-icon="mdi-email"
+                            hint="todog@example.com"
+                            :loading="this.$store.getters['loader/loader']"
+                            :rules="[rules.required, rules.email]"
+                        />
+                        <v-text-field
+                            v-model="password"
+                            tabindex="2"
+                            type="password"
+                            clearable
+                            persistent-hint
+                            prepend-inner-icon="mdi-lock-question"
+                            :counter="counter"
+                            :loading="this.$store.getters['loader/loader']"
+                            :rules="[rules.required, rules.counter]"
+                        />
+                        <v-checkbox
+                            v-model="remember"
+                            tabindex="3"
+                            label="ログイン状態を保持する"
+                        />
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn
+                            text
+                            outlined
+                            to="/"
+                        >TOPページへ戻る
+                        </v-btn>
 
-                            <v-spacer/>
+                        <v-spacer/>
 
-                            <input type="hidden" name="_token" :value="token"/>
-                            <v-btn
-                                type="submit"
-                                text
-                                outlined
-                                color="primary"
-                                @click="login"
-                            >ログイン
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-col>
-            </v-row>
-        </v-container>
-    </form>
+                        <v-btn
+                            type="submit"
+                            text
+                            outlined
+                            color="primary"
+                            @click="login"
+                        >ログイン
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
+    import mixin from "../mixins/mixin";
+
     export default {
         name: "Login",
+        mixins: [mixin],
         data() {
             return {
-                token: '',
                 loading: false,
                 counter: 0,
                 rules: {
@@ -80,20 +80,41 @@
                         return pattern.test(value) || 'メールの形式で入力してください。';
                     },
                 },
+                email: '',
+                password: '',
+                remember: false,
             }
-        },
-        created() {
-            this.token = getCSRFToken();
         },
         methods: {
-            login() {
-                this.$store.dispatch('loader/setLoader', true);
+            async login() {
+                await this.$store.dispatch('loader/setLoader', true);
+
+                const params = new FormData();
+                params.append('email', this.email);
+                params.append('password', this.password);
+                if (this.remember) {
+                    params.append('remember', this.remember);
+                }
+                const res = await this.api('post', 'api/login', params);
+                if (res.status === 200) {
+                    await this.$router.push('home');
+                } else if (res.status === 422) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', this.getLaravelErrorMessages(res.data.errors));
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else if (res.status === 500) {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', res.data.message);
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                } else {
+                    await this.$store.dispatch('snackbar/setSnackbar', true);
+                    await this.$store.dispatch('snackbar/setText', 'サーバーでエラーが発生しました。');
+                    await this.$store.dispatch('snackbar/setColor', 'error');
+                }
+
+                await this.$store.dispatch('loader/setLoader', false);
             }
         }
-    }
-
-    function getCSRFToken() {
-        return document.getElementsByName('csrf-token').item(0).content
     }
 
 </script>
