@@ -45,7 +45,7 @@ final class LoginUseCase
                 throw new \Exception('Emailまたはパスワードが違います。');
             }
 
-            Auth::login($user);
+            Auth::login($user, $request->exists('remember'));
 
             if (!Auth::check()) {
                 throw new \Exception('ログインに失敗しました。');
