@@ -32,6 +32,7 @@
                             />
                             <v-checkbox
                                 name="remember"
+                                value="true"
                                 label="ログイン状態を保持する"
                             />
                         </v-card-text>

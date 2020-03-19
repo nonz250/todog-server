@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\UseCase\Task;
 
@@ -72,7 +72,7 @@ final class NoticeTaskUseCase
                         $fcmNotification = new FcmNotification(
                             new FcmToken((string) $token->getAttribute('token')),
                             new FcmTitle('期限が近いタスクがあります'),
-                            new FcmBody($limitedTask->getAttribute('name')),
+                            new FcmBody((string) $limitedTask->getAttribute('name')),
                             new FcmIcon('/todog-round-icon.png'),
                             new FcmTimeToLeave(60),
                             new FcmClickAction(route('root'))
