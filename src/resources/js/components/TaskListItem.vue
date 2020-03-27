@@ -108,7 +108,7 @@
                                 prefix="期限"
                                 suffix="日前から通知"
                                 v-model="notificationStartDays"
-                                :rules="[rules.notification_start_days]"
+                                :rules="[rules.number]"
                             />
                         </v-list-item-content>
                     </v-list-item>
@@ -161,7 +161,7 @@
                 ],
                 rules: {
                     required: value => !!value || 'この項目は必須です。',
-                    notification_start_days: value => {
+                    number: value => {
                         const number = Number(value);
                         if (!Number.isInteger(number)) {
                             return '数値で入力して下さい。';

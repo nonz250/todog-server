@@ -1,11 +1,12 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\UseCase\TaskList;
 
 
 use App\Domain\Repository\TaskListRepositoryInterface;
 use App\Domain\ValueObject\TaskListName;
+use App\Domain\ValueObject\TaskListSort;
 use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\UserId;
 use App\Http\Requests\CreateTaskListRequest;
@@ -38,14 +39,16 @@ final class CreateTaskListUseCase
     public function __invoke(CreateTaskListRequest $request): JsonResponse
     {
         $userId = new UserId(Auth::id());
-        $taskListName = new TaskListName($request->get('name'));
+        $taskListName = new TaskListName((string) $request->get('name'));
+        $taskListSort = new TaskListSort((int) $request->get('sort', 0));
         $taskListStatus = new TaskListStatus(TaskList::STATUS_ENABLED);
 
-        $taskList = $this->taskListRepository->saveTaskList($userId, $taskListName, $taskListStatus);
+        $taskList = $this->taskListRepository->saveTaskList($userId, $taskListName, $taskListSort, $taskListStatus);
 
         return response()->json([
             'id' => $taskList->getAttribute('id'),
             'name' => $taskList->getAttribute('name'),
+            'sort' => $taskList->getAttribute('sort'),
         ]);
     }
 }
