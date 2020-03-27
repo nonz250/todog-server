@@ -220,6 +220,29 @@
             <div v-html="text"></div>
         </dialog-component>
 
+        <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+        >
+            <dialog-component :dialog="isSort"
+                              :disabled="!valid"
+                              title="リストの順番を変更"
+                              @ok="changeSort"
+                              @cancel="isSort = false"
+            >
+                <v-container>
+                    <v-text-field
+                        ref="sort"
+                        prefix="リストを"
+                        suffix="番目に移動する"
+                        v-model="sort"
+                        :rules="[rules.unsigned_int]"
+                    />
+                </v-container>
+            </dialog-component>
+        </v-form>
+
     </v-card>
 
 </template>
@@ -245,6 +268,7 @@
                 isEditTaskList: false,
                 dialog: false,
                 isColorPicker: false,
+                isSort: false,
                 color: '#FFFFFF',
                 title: '',
                 text: '',
@@ -265,6 +289,11 @@
                         operation: 'color',
                     },
                     {
+                        name: 'リストの順番を変更',
+                        color: 'default',
+                        operation: 'sort',
+                    },
+                    {
                         name: '完了タスクを削除',
                         color: 'error',
                         operation: 'archive',
@@ -275,12 +304,36 @@
                         operation: 'delete',
                     },
                 ],
+                valid: true,
+                rules: {
+                    required: value => !!value || 'この項目は必須です。',
+                    unsigned_int: value => {
+                        const number = Number(value);
+                        if (!Number.isInteger(number)) {
+                            return '数値で入力して下さい。';
+                        }
+                        if (typeof Number(value) !== 'number') {
+                            return '数値で入力して下さい。';
+                        }
+                        if (number < 0) {
+                            return '0以上で入力して下さい。';
+                        }
+                        return true;
+                    },
+                },
             }
         },
         created() {
-            this.enabled = !isMobile(navigator.userAgent).any
+            this.enabled = !isMobile(navigator.userAgent).any;
             const color = localStorage.getItem('task_list_color:' + this.taskList.id);
-            this.color = color === null ? this.color : color;
+            this.color = color === null ? '#FFFFFF' : color;
+        },
+        watch: {
+            taskList() {
+                this.enabled = !isMobile(navigator.userAgent).any;
+                const color = localStorage.getItem('task_list_color:' + this.taskList.id);
+                this.color = color === null ? '#FFFFFF' : color;
+            }
         },
         computed: {
             isExistCompletedTasks() {
@@ -298,6 +351,14 @@
                 },
                 set(value) {
                     this.taskList.name = value;
+                }
+            },
+            sort: {
+                get() {
+                    return this.taskList.sort;
+                },
+                set(value) {
+                    this.taskList.sort = value;
                 }
             }
         },
@@ -329,6 +390,12 @@
                     this.dialog = true;
                 } else if (operation === 'color') {
                     this.isColorPicker = true;
+                } else if (operation === 'sort') {
+                    this.isSort = true;
+                    const vm = this;
+                    this.$nextTick(() => {
+                        vm.$refs['sort'].focus();
+                    });
                 } else if (operation === 'changeTaskListName') {
                     this.isEditTaskList = true;
                 } else {
@@ -371,6 +438,10 @@
                 this.taskList.name = this.inputTaskListName;
                 this.isEditTaskList = false;
                 this.$emit('update-task-list', this.taskList);
+            },
+            changeSort() {
+                this.isSort = false;
+                this.$emit('change-sort', this.taskList);
             }
         }
     }

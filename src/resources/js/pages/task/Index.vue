@@ -10,6 +10,7 @@
                 @delete-task="deleteTask"
                 @archive-tasks="archiveTasks"
                 @update-task-list="updateTaskList"
+                @change-sort="changeSort"
             />
         </li>
         <li class="task-list">
@@ -60,6 +61,7 @@
             return {
                 isDisplayInputName: false,
                 name: '',
+                sort: 0,
                 lists: [],
             }
         },
@@ -91,6 +93,7 @@
                         this.lists.push({
                             id: res.data[i].id,
                             name: res.data[i].name,
+                            sort: res.data[i].sort,
                             tasks: res.data[i].tasks,
                         });
                     }
@@ -113,6 +116,7 @@
 
                 const params = new FormData();
                 params.append('name', taskList.name);
+                params.append('sort', taskList.sort);
 
                 const res = await this.api('put', '/api/task_list/' + taskList.id, params);
 
@@ -139,8 +143,15 @@
             async clickAddList() {
                 await this.$store.dispatch('loader/setLoader', true);
 
+                const max = this.lists.map((item) => {
+                    return item.sort;
+                });
+
+                const sort = Math.max.apply(null, max) + 1;
+
                 const params = new FormData();
-                params.append('name', this.name);
+                await params.append('name', this.name);
+                await params.append('sort', String(sort));
 
                 const res = await this.api('post', '/api/task_list', params);
 
@@ -148,6 +159,7 @@
                     this.lists.push({
                         id: res.data.id,
                         name: res.data.name,
+                        sort: res.data.sort,
                         tasks: [],
                     });
                     this.isDisplayInputName = false;
@@ -329,6 +341,40 @@
 
                 await this.$store.dispatch('loader/setLoader', false);
             },
+            async changeSort(taskList) {
+                let deleteKey;
+                Object.keys(this.lists).forEach((key) => {
+                    if (Number(this.lists[key].id) === Number(taskList.id)) {
+                        deleteKey = key;
+                    }
+                });
+
+                this.lists.splice(deleteKey, 1);
+
+                if (this.lists.length < taskList.sort) {
+                    this.lists.push(taskList)
+                } else {
+                    Object.keys(this.lists).forEach((key) => {
+                        console.log(Number(key))
+                        console.log(Number(taskList.sort) - 1)
+                        console.log(Number(key) === Number(taskList.sort) - 1)
+                        if (Number(key) === Number(taskList.sort) - 1) {
+                            this.lists.splice(Number(key), 0, taskList);
+                        }
+                    });
+                }
+
+                const parallels = [];
+
+                Object.keys(this.lists).forEach((key) => {
+                    this.lists[key].sort = Number(key) + 1;
+                    parallels.push(new Promise((resolve, reject) => {
+                        return resolve(this.updateTaskList(this.lists[key]));
+                    }));
+                });
+
+                await Promise.all(parallels);
+            }
         }
     }
 </script>

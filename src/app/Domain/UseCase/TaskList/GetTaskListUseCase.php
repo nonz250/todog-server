@@ -69,6 +69,7 @@ final class GetTaskListUseCase
             $results[] = [
                 'id' => $taskList->id,
                 'name' => $taskList->name,
+                'sort' => $taskList->sort,
                 'tasks' => $taskList->tasks,
             ];
         }
