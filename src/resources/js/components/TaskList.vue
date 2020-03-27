@@ -315,8 +315,8 @@
                         if (typeof Number(value) !== 'number') {
                             return '数値で入力して下さい。';
                         }
-                        if (number < 0) {
-                            return '0以上で入力して下さい。';
+                        if (number <= 0) {
+                            return '1以上で入力して下さい。';
                         }
                         return true;
                     },
