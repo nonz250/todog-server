@@ -63,6 +63,9 @@
                     <v-toolbar-title>タスクを編集</v-toolbar-title>
                     <v-spacer/>
                     <v-toolbar-items>
+                        <v-btn text @click="clickResetNotificationStartDate">通知日時を削除</v-btn>
+                    </v-toolbar-items>
+                    <v-toolbar-items>
                         <v-btn text @click="clickUpdate">更新</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
@@ -103,7 +106,7 @@
                     </v-list-item>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title>通知開始</v-list-item-title>
+                            <v-list-item-title>通知日時</v-list-item-title>
                             <v-text-field
                                 prefix="期限"
                                 suffix="日前から通知"
@@ -172,7 +175,7 @@
             }
         },
         created() {
-            if (this.limitDate !== null) {
+            if (this.limitDate !== null && this.task.notification_start_date) {
                 this.notificationStartDays = dayjs(this.limitDate)
                     .diff(this.task.notification_start_date, 'day')
             }
@@ -233,7 +236,7 @@
                 this.formDialog = false;
                 this.task.name = this.dialogTaskName;
                 this.task.limit_date = this.limitDate;
-                if (this.task.limit_date !== null) {
+                if (this.limitDate !== null && this.notificationStartDays !== null) {
                     this.task.notification_start_date = dayjs(this.limitDate)
                         .subtract(this.notificationStartDays, 'day')
                         .format('YYYY-MM-DD');
@@ -249,6 +252,10 @@
                     'red--text': color === 'error',
                 }
             },
+            clickResetNotificationStartDate() {
+                this.notificationStartDays = null;
+                this.task.notification_start_date = null
+            }
         }
     }
 </script>
