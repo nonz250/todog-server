@@ -11,6 +11,7 @@ use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListSort;
 use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\UserId;
+use App\Models\ArchiveTaskList;
 use App\Models\TaskList;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -117,11 +118,14 @@ final class TaskListRepository implements TaskListRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function deleteById(TaskListId $taskListId, UserId $userId): int
+    public function deleteById(TaskListId $taskListId, UserId $userId): ArchiveTaskList
     {
-        return TaskList::findById($taskListId, $userId)
-            ->update([
-                'status' => TaskList::STATUS_DISABLED,
-            ]);
+        $taskList = TaskList::findById($taskListId, $userId);
+        $archiveTaskList = new ArchiveTaskList();
+        if ($archiveTaskList->fill($taskList->first()->toArray())->save() === false) {
+            throw new Exception('タスクリストの削除に失敗しました。');
+        }
+        $taskList->delete();
+        return $archiveTaskList;
     }
 }

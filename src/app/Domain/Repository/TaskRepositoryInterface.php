@@ -14,6 +14,7 @@ use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskNotificationStartDate;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
+use App\Models\ArchiveTask;
 use App\Models\Task;
 use Carbon\Carbon;
 use Exception;
@@ -72,10 +73,10 @@ interface TaskRepositoryInterface
     /**
      * @param TaskId $taskId
      * @param UserId $userId
-     * @return Builder
+     * @return ArchiveTask
      * @throws Exception
      */
-    public function deleteById(TaskId $taskId, UserId $userId): Builder;
+    public function deleteById(TaskId $taskId, UserId $userId): ArchiveTask;
 
     /**
      * @param TaskIdCollection $taskIdCollection

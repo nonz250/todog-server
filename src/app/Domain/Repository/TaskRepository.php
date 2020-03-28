@@ -14,6 +14,8 @@ use App\Domain\ValueObject\TaskName;
 use App\Domain\ValueObject\TaskNotificationStartDate;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
+use App\Models\ArchiveTask;
+use App\Models\ArchiveTaskList;
 use App\Models\Task;
 use Carbon\Carbon;
 use Exception;
@@ -84,9 +86,15 @@ final class TaskRepository implements TaskRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function deleteById(TaskId $taskId, UserId $userId): Builder
+    public function deleteById(TaskId $taskId, UserId $userId): ArchiveTask
     {
-        return $this->updateStatusById($taskId, $userId, new TaskStatus(Task::STATUS_DISABLED));
+        $task = Task::findById($taskId);
+        $archiveTask = new ArchiveTask();
+        if ($archiveTask->fill($task->first()->toArray())->save() === false) {
+            throw new Exception('タスクの削除に失敗しました。');
+        }
+        $task->delete();
+        return $archiveTask;
     }
 
     /**
@@ -96,14 +104,8 @@ final class TaskRepository implements TaskRepositoryInterface
     {
         $taskIds = new TaskIdCollection();
         foreach ($taskIdCollection as $taskId) {
-            $taskIds->push(
-                new TaskId(
-                    (int) $this
-                        ->updateStatusById($taskId, $userId, new TaskStatus(Task::STATUS_DISABLED))
-                        ->first('id')
-                        ->getAttribute('id')
-                )
-            );
+            $this->deleteById($taskId, $userId);
+            $taskIds->push($taskId);
         }
         return $taskIds;
     }
@@ -116,11 +118,19 @@ final class TaskRepository implements TaskRepositoryInterface
         UserId $userId,
         TaskStatusCollection $taskStatusCollection
     ): int {
-        return $this->findByTaskListId($taskListId, $userId)
-            ->whereIn('status', $taskStatusCollection->toArray())
-            ->update([
-                'status' => Task::STATUS_DISABLED,
-            ]);
+        $tasks = $this->findByTaskListId($taskListId, $userId)
+            ->whereIn('status', $taskStatusCollection->toArray());
+
+        $deleteCount = $tasks->count();
+
+        $tasks->each(function ($task) {
+            $archiveTask = new ArchiveTask();
+            /** @var Task $task */
+            $archiveTask->newQuery()->create($task->toArray());
+            $task->delete();
+        });
+
+        return $deleteCount;
     }
 
     /**

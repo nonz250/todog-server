@@ -1,14 +1,12 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\UseCase\Task;
 
 
 use App\Domain\Repository\TaskRepositoryInterface;
 use App\Domain\ValueObject\TaskId;
-use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
-use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,11 +37,10 @@ final class DeleteTaskUseCase
         $taskId = new TaskId($id);
         $userId = new UserId(Auth::id());
         $task = $this->taskRepository
-            ->deleteById($taskId, $userId)
-            ->first();
+            ->deleteById($taskId, $userId);
         return response()->json([
             'result' => true,
-            'id' => $task->getAttribute('id'),
+            'id' => $taskId->toInt(),
             'task_list_id' => $task->getAttribute('task_list_id'),
         ]);
     }

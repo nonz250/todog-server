@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\UseCase\TaskList;
 
@@ -11,7 +11,8 @@ use App\Domain\ValueObject\TaskListId;
 use App\Domain\ValueObject\TaskStatus;
 use App\Domain\ValueObject\UserId;
 use App\Models\Task;
-use Illuminate\Database\Eloquent\Builder;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -43,8 +44,8 @@ final class DeleteTaskListUseCase
 
     /**
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function __invoke(int $id)
     {
@@ -55,11 +56,7 @@ final class DeleteTaskListUseCase
             new TaskStatus(Task::STATUS_COMPLETED),
         ]);
 
-        /**
-         * @var int $updateCountTask
-         * @var Builder $taskList
-         */
-        list($updateCountTask, $taskList) = DB::transaction(function () use (
+        $updateCountTask = DB::transaction(function () use (
             $taskListId,
             $userId,
             $taskStatusCollection
@@ -70,18 +67,13 @@ final class DeleteTaskListUseCase
             $this->taskListRepository
                 ->deleteById($taskListId, $userId);
 
-            $taskList = $this->taskListRepository
-                ->findById($taskListId, $userId);
-            return [
-                $updateCountTask,
-                $taskList,
-            ];
+            return $updateCountTask;
         });
 
         return response()->json([
             'result' => true,
             'task_delete_num' => $updateCountTask,
-            'id' => $taskList->first()->getAttribute('id'),
+            'id' => $taskListId->toInt(),
         ]);
     }
 }

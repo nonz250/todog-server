@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Domain\UseCase\Task;
 
@@ -9,6 +9,7 @@ use App\Domain\Repository\TaskRepositoryInterface;
 use App\Domain\ValueObject\TaskId;
 use App\Domain\ValueObject\UserId;
 use Dotenv\Exception\ValidationException;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,8 +32,8 @@ final class ArchiveTaskUseCase
 
     /**
      * @param string $ids
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function __invoke(string $ids): JsonResponse
     {

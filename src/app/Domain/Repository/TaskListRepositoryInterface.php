@@ -11,6 +11,7 @@ use App\Domain\ValueObject\TaskListName;
 use App\Domain\ValueObject\TaskListSort;
 use App\Domain\ValueObject\TaskListStatus;
 use App\Domain\ValueObject\UserId;
+use App\Models\ArchiveTaskList;
 use App\Models\TaskList;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -76,7 +77,8 @@ interface TaskListRepositoryInterface
     /**
      * @param TaskListId $taskListId
      * @param UserId $userId
-     * @return int
+     * @return ArchiveTaskList
+     * @throws Exception
      */
-    public function deleteById(TaskListId $taskListId, UserId $userId): int;
+    public function deleteById(TaskListId $taskListId, UserId $userId): ArchiveTaskList;
 }
