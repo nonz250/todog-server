@@ -17,19 +17,19 @@ class ArchiveTasks extends Migration
         $taskLists = \App\Models\TaskList::all();
         $tasks = \App\Models\Task::all();
 
-        $archiveTaskLists = [];
-        foreach ($taskLists as $taskList) {
-            if ((int) $taskList->getAttribute('status') === \App\Models\TaskList::STATUS_DISABLED) {
-                $archiveTaskLists[] = $taskList;
-                $taskList->delete();
-            }
-        }
-
         $archiveTasks = [];
         foreach ($tasks as $task) {
             if ((int) $task->getAttribute('status') === \App\Models\Task::STATUS_DISABLED) {
                 $archiveTasks[] = $task;
                 $task->delete();
+            }
+        }
+
+        $archiveTaskLists = [];
+        foreach ($taskLists as $taskList) {
+            if ((int) $taskList->getAttribute('status') === \App\Models\TaskList::STATUS_DISABLED) {
+                $archiveTaskLists[] = $taskList;
+                $taskList->delete();
             }
         }
 
