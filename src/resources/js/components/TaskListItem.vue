@@ -175,9 +175,17 @@
             }
         },
         created() {
-            if (this.limitDate !== null && this.task.notification_start_date) {
+            if (this.limitDate !== null && this.task.notification_start_date !== null) {
                 this.notificationStartDays = dayjs(this.limitDate)
                     .diff(this.task.notification_start_date, 'day')
+            }
+        },
+        watch: {
+            task() {
+                if (this.limitDate !== null && this.task.notification_start_date !== null) {
+                    this.notificationStartDays = dayjs(this.limitDate)
+                        .diff(this.task.notification_start_date, 'day')
+                }
             }
         },
         computed: {

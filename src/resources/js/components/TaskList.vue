@@ -111,8 +111,7 @@
                 <draggable
                     v-model="taskList.tasks"
                     group="group"
-                    @start="drag=true"
-                    @end="drag=false"
+                    @add="dragEnd"
                     :options="{animation: 200}"
                     :disabled="!enabled"
                 >
@@ -442,6 +441,20 @@
             changeSort() {
                 this.isSort = false;
                 this.$emit('change-sort', this.taskList);
+            },
+            dragEnd() {
+                let task = null;
+
+                Object.keys(this.taskList.tasks).forEach((key) => {
+                    if (Number(this.taskList.tasks[key].task_list_id) !== Number(this.taskList.id)) {
+                        this.taskList.tasks[key].task_list_id = this.taskList.id;
+                        task = this.taskList.tasks[key];
+                    }
+                });
+
+                if (task !== null) {
+                    this.$emit('update-task', task);
+                }
             }
         }
     }
