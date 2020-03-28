@@ -40,30 +40,12 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-row>
-            <v-col>
-                <v-card>
-                    <v-card-text>
-                        <p>更新はこちら</p>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer/>
-                        <v-btn
-                            text
-                            outlined
-                            color="primary"
-                            @click="update"
-                        >更新
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-col>
-        </v-row>
     </v-container>
 </template>
 
 <script>
     import mixin from "../mixins/mixin";
+    import swController from "../src/swController";
 
     const debug = process.env.NODE_ENV !== 'production';
 
@@ -72,6 +54,11 @@
     export default {
         name: "Index",
         mixins: [mixin],
+        data() {
+            return {
+                sw: null,
+            };
+        },
         computed: {
             debug() {
                 return process.env.NODE_ENV !== 'production';
@@ -79,21 +66,8 @@
         },
         methods: {
             async install() {
-                const vm = this;
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker
-                        .register("/sw.js")
-                        .then(registration => {
-                            if (vm.debug) {
-                                console.log("ServiceWorker registered");
-                            }
-                        })
-                        .catch(error => {
-                            console.warn("ServiceWorker error", error);
-                        })
-                        .finally(() => {
-                        });
-                }
+                this.sw = await (new swController()).init();
+                await this.sw.installApp();
             },
             async notification() {
                 firebase.messaging().requestPermission().then(() => {
@@ -135,29 +109,6 @@
                     // return Promise.resolve(notice(request))
                 })
             },
-            async update() {
-                const vm = this;
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker
-                        .register("/sw.js")
-                        .then(registration => {
-                            if (vm.debug) {
-                                console.log("ServiceWorker registered");
-                            }
-                            registration.onupdatefound = function () {
-                                if (vm.debug) {
-                                    console.log("Exist update");
-                                }
-                                registration.update();
-                            };
-                        })
-                        .catch(error => {
-                            console.warn("ServiceWorker error", error);
-                        })
-                        .finally(() => {
-                        });
-                }
-            }
         }
     }
 </script>

@@ -15,17 +15,35 @@
             <v-btn text @click="snackbar = false">閉じる</v-btn>
         </v-snackbar>
         <reload-dialog
-            :dialog="this.$store.getters['reloadDialog/reload_dialog']"
+            :dialog="reloadDialog"
         />
+        <dialog-component
+            :dialog="swDialog"
+            title="アプリのアップデート"
+            :ok="{color: 'success', text: '更新'}"
+            @ok="updateApp"
+            @cancel=""
+        >
+            <v-container>
+                <p>アプリのバージョンが更新されています。</p>
+                <p>更新してください。</p>
+            </v-container>
+        </dialog-component>
     </v-app>
 </template>
 
 <script>
     import mixin from "./mixins/mixin";
+    import swController from "./src/swController";
 
     export default {
         name: "App.vue",
         mixins: [mixin],
+        // data() {
+        //     return {
+        //         sw: null,
+        //     };
+        // },
         computed: {
             isLoggedIn() {
                 return Object.keys(this.$store.getters['auth/user']).length > 0;
@@ -38,6 +56,22 @@
                     this.$store.dispatch('snackbar/setSnackbar', value)
                 }
             },
+            swDialog: {
+                get() {
+                    return this.$store.getters['swDialog/sw_dialog'];
+                },
+                set(value) {
+                    this.$store.dispatch('swDialog/setSwDialog', value)
+                }
+            },
+            reloadDialog: {
+                get() {
+                    return this.$store.getters['reloadDialog/reload_dialog']
+                },
+                set(value) {
+                    this.$store.dispatch('swDialog/setReloadDialog', value)
+                }
+            }
         },
         async created() {
             if (this.$router.currentRoute.path === '/login') {
@@ -52,17 +86,23 @@
                 await this.$store.dispatch('reloadDialog/setReloadDialog', true);
             }
 
-            // const user = this.$store.getters['auth/user'];
-            // if (Object.keys(user).length === 0) {
-            //     if (this.isLoggedIn) {
-            // ログイン
-            // const user = await this.api('get', '/api/user', {});
-            // await this.$store.dispatch('auth/currentUser');
-            // } else {
-            //     await this.$router.push('login');
-            // }
-            // }
-        }
+            // 更新検知をしたときの挙動を定義
+            // const vm = this;
+            // const onUpdateFound = () => {
+            //     // 更新を検知したらモーダルで表示する。
+            //     vm.$store.dispatch('swDialog/setSwDialog', true);
+            // };
+            //
+            // // service worker 適応検知
+            // this.sw = await (new swController()).init();
+            // await this.sw.registerUpdateListener(onUpdateFound);
+            // await this.sw.updateApp();
+        },
+        methods: {
+            async updateApp() {
+                // await this.sw.activateApp();
+            }
+        },
     }
 </script>
 
