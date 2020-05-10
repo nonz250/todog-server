@@ -39,7 +39,7 @@
 
         </v-list-item-action>
 
-        <dialog-component :dialog="dialog"
+        <alert-dialog :dialog="dialog"
                           :title="title"
                           :ok="ok"
                           :cancel="cancel"
@@ -47,7 +47,7 @@
                           @cancel="dialog = false"
         >
             <div v-html="text"></div>
-        </dialog-component>
+        </alert-dialog>
 
         <v-dialog
             v-model="formDialog"
@@ -126,9 +126,11 @@
     import tasks from "../app/tasks";
     import dayjs from "dayjs";
     import task from "../routes/task";
+    import AlertDialog from "./AlertDialog";
 
     export default {
         name: "TaskListItem",
+        components: {AlertDialog},
         props: {
             task: {
                 type: Object,

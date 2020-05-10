@@ -47,7 +47,7 @@
     import mixin from "../mixins/mixin";
 
     export default {
-        name: "Dialog",
+        name: "ReloadDialog",
         mixins: [mixin],
         props: {
             dialog: {

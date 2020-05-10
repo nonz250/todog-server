@@ -112,7 +112,7 @@
                     v-model="taskList.tasks"
                     group="group"
                     @add="dragEnd"
-                    :options="{animation: 200}"
+                    v-bind="{animation: 200}"
                     :disabled="!enabled"
                 >
                     <div v-for="(task, index) in taskList.tasks" :key="index">
@@ -208,7 +208,7 @@
 
         </v-card-actions>
 
-        <dialog-component :dialog="dialog"
+        <alert-dialog :dialog="dialog"
                           :title="title"
                           :ok="ok"
                           :cancel="cancel"
@@ -217,14 +217,14 @@
                           @cancel="dialog = false"
         >
             <div v-html="text"></div>
-        </dialog-component>
+        </alert-dialog>
 
         <v-form
             ref="form"
             v-model="valid"
             lazy-validation
         >
-            <dialog-component :dialog="isSort"
+            <alert-dialog :dialog="isSort"
                               :disabled="!valid"
                               title="リストの順番を変更"
                               @ok="changeSort"
@@ -239,7 +239,7 @@
                         :rules="[rules.unsigned_int]"
                     />
                 </v-container>
-            </dialog-component>
+            </alert-dialog>
         </v-form>
 
     </v-card>
@@ -247,13 +247,15 @@
 </template>
 
 <script>
-    import draggableComponent from 'vuedraggable';
+    import draggable from 'vuedraggable';
     import isMobile from 'ismobilejs';
     import tasks from "../app/tasks";
+    import AlertDialog from "./AlertDialog";
+    import TaskListItem from "./TaskListItem";
 
     export default {
         name: "TaskList",
-        components: {draggableComponent},
+        components: {AlertDialog, TaskListItem, draggable},
         props: {
             taskList: {
                 type: Object,
