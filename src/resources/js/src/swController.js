@@ -1,28 +1,27 @@
 import constants from './constants';
 
 export default class SwController {
-
-  static get SERVICE_WORKER_JS() {
+  static get SERVICE_WORKER_JS () {
     return '/sw.js';
   }
 
-  get registration() {
+  get registration () {
     return this._registration;
   }
 
-  set registration(value) {
+  set registration (value) {
     this._registration = value;
   }
 
-  constructor() {
+  constructor () {
   }
 
-  async init() {
+  async init () {
     this.registration = await this.getRegistration();
     return this;
   }
 
-  async getRegistration() {
+  async getRegistration () {
     if ('serviceWorker' in navigator) {
       if (constants.isDebug()) {
         console.log('serviceWorker exists.');
@@ -36,7 +35,7 @@ export default class SwController {
     }
   }
 
-  async registerInstallListener(callback) {
+  async registerInstallListener (callback) {
     await this.registration.addEventListener('install', (event) => {
       if (constants.isDebug()) {
         console.log('install');
@@ -48,7 +47,7 @@ export default class SwController {
     return this;
   }
 
-  async registerUpdateListener(callback) {
+  async registerUpdateListener (callback) {
     await this.registration.addEventListener('updatefound', (event) => {
       if (constants.isDebug()) {
         console.log('updatefound');
@@ -60,12 +59,12 @@ export default class SwController {
     return this;
   }
 
-  async updateApp() {
+  async updateApp () {
     this.registration.update();
     return this;
   }
 
-  async installApp() {
+  async installApp () {
     if ('serviceWorker' in navigator) {
       if (constants.isDebug()) {
         console.log('serviceWorker exists.');
@@ -89,7 +88,7 @@ export default class SwController {
     }
   }
 
-  async activateApp() {
+  async activateApp () {
     await this.registration.skipWaiting();
     // const cacheWhitelist = [CACHE_NAME];
     //

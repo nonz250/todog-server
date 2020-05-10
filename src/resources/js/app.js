@@ -39,5 +39,5 @@ const app = new Vue({
   vuetify,
   router,
   store,
-  firebase,
+  firebase
 });

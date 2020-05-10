@@ -264,7 +264,9 @@ export default {
     taskList: {
       type: Object,
       required: true,
-      default: {},
+      default: () => {
+        return {};
+      },
     }
   },
   data() {

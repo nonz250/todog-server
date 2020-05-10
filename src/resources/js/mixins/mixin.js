@@ -15,7 +15,7 @@ const onError = (err) => {
 
 export default {
   methods: {
-    async api(method, url, params) {
+    async api (method, url, params) {
       if (debug) {
         console.log('--- API RUN ---');
         console.log('method >> ' + method);
@@ -23,12 +23,12 @@ export default {
         console.log(params);
       }
 
-      let config = {
+      const config = {
         method: null,
         url: url,
-        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
         data: null,
-        params: null,
+        params: null
       };
 
       if (method === 'post') {
@@ -57,9 +57,9 @@ export default {
 
       return response;
     },
-    getMessages(messages) {
-      let results = [];
-      for (let i in messages) {
+    getMessages (messages) {
+      const results = [];
+      for (const i in messages) {
         results.push(messages[i]);
       }
       return results.join('\n');

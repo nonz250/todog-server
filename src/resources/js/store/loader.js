@@ -1,5 +1,5 @@
 const state = {
-  loader: false,
+  loader: false
 };
 
 const getters = {
@@ -7,15 +7,15 @@ const getters = {
 };
 
 const mutations = {
-  setLoader(state, loading) {
+  setLoader (state, loading) {
     state.loader = loading;
   }
 };
 
 const actions = {
-  setLoader(context, loading) {
+  setLoader (context, loading) {
     context.commit('setLoader', loading);
-  },
+  }
 };
 
 export default {

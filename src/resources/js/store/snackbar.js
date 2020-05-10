@@ -2,7 +2,7 @@ const state = {
   snackbar: false,
   text: '',
   color: '',
-  position: 'top',
+  position: 'top'
 };
 
 const getters = {
@@ -13,33 +13,33 @@ const getters = {
 };
 
 const mutations = {
-  setSnackbar(state, snackbar) {
+  setSnackbar (state, snackbar) {
     state.snackbar = snackbar;
   },
-  setText(state, text) {
+  setText (state, text) {
     state.text = text;
   },
-  setColor(state, color) {
+  setColor (state, color) {
     state.color = color;
   },
-  setPosition(state, position) {
+  setPosition (state, position) {
     state.position = position;
-  },
+  }
 };
 
 const actions = {
-  setSnackbar(context, snackbar) {
+  setSnackbar (context, snackbar) {
     context.commit('setSnackbar', snackbar);
   },
-  setText(context, text) {
+  setText (context, text) {
     context.commit('setText', text);
   },
-  setColor(context, color) {
+  setColor (context, color) {
     context.commit('setColor', color);
   },
-  setPosition(context, position) {
+  setPosition (context, position) {
     context.commit('setPosition', position);
-  },
+  }
 };
 
 export default {

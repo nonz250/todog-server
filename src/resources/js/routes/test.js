@@ -6,11 +6,11 @@ const routes = [
     path: '/test',
     component: Test,
     meta: {
-      title: 'Todog',
+      title: 'Todog'
     }
   }
 ];
 
 export default {
-  routes,
+  routes
 };

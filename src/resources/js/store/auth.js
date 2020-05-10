@@ -1,5 +1,5 @@
 const state = {
-  user: false,
+  user: false
 };
 
 const getters = {
@@ -7,15 +7,15 @@ const getters = {
 };
 
 const mutations = {
-  setUser(user) {
+  setUser (user) {
     state.user = user;
   }
 };
 
 const actions = {
-  setUser(context, user) {
+  setUser (context, user) {
     context.commit('setUser', user);
-  },
+  }
 };
 
 export default {
