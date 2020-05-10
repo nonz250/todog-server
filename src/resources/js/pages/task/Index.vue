@@ -53,9 +53,11 @@
 <script>
     import mixin from "../../mixins/mixin";
     import dayjs from "dayjs";
+    import TaskList from "../../components/TaskList";
 
     export default {
         name: "Index",
+        components: {TaskList},
         mixins: [mixin],
         data() {
             return {

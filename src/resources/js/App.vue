@@ -1,8 +1,6 @@
 <template>
     <v-app>
-        <nav-component
-            :is-logged-in="isLoggedIn"
-        />
+        <navigator :is-logged-in="isLoggedIn"/>
         <transition mode="out-in">
             <router-view/>
         </transition>
@@ -17,7 +15,7 @@
         <reload-dialog
             :dialog="reloadDialog"
         />
-        <dialog-component
+        <alert-dialog
             :dialog="swDialog"
             title="アプリのアップデート"
             :ok="{color: 'success', text: '更新'}"
@@ -28,22 +26,20 @@
                 <p>アプリのバージョンが更新されています。</p>
                 <p>更新してください。</p>
             </v-container>
-        </dialog-component>
+        </alert-dialog>
     </v-app>
 </template>
 
 <script>
     import mixin from "./mixins/mixin";
-    import swController from "./src/swController";
+    import ReloadDialog from "./components/ReloadDialog";
+    import AlertDialog from "./components/AlertDialog";
+    import Navigator from "./components/Navigator";
 
     export default {
-        name: "App.vue",
+        name: "App",
+        components: {AlertDialog, Navigator, ReloadDialog},
         mixins: [mixin],
-        // data() {
-        //     return {
-        //         sw: null,
-        //     };
-        // },
         computed: {
             isLoggedIn() {
                 return Object.keys(this.$store.getters['auth/user']).length > 0;

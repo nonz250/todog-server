@@ -79,34 +79,24 @@
                             </v-col>
                         </v-row>
                     </v-container>
-                    <!--                    <v-container>-->
-                    <!--                        <v-row>-->
-                    <!--                            <v-col class="flex text-sm-center">-->
-                    <!--                                <v-btn icon @click="toSetting">-->
-                    <!--                                    <v-icon x-large>mdi-wrench</v-icon>-->
-                    <!--                                </v-btn>-->
-                    <!--                            </v-col>-->
-                    <!--                            <v-col class="flex text-sm-center">-->
-                    <!--                            </v-col>-->
-                    <!--                            <v-col class="flex text-sm-center">-->
-                    <!--                            </v-col>-->
-                    <!--                        </v-row>-->
-                    <!--                    </v-container>-->
                 </v-card>
 
             </v-menu>
 
         </v-app-bar>
 
-        <nav-drawer-component ref="drawer"/>
+        <nav-drawer ref="drawer"/>
 
     </div>
 </template>
 
 <script>
 
+    import NavDrawer from "./NavDrawer";
+
     export default {
-        name: "Nav",
+        name: "Navigator",
+        components: {NavDrawer},
         props: {
             isLoggedIn: {
                 type: Boolean,

@@ -76,9 +76,9 @@
                     }
                     firebase.messaging().getToken().then(token => {
                         if (debug) {
-                            console.log('==========')
+                            console.log('==========');
                             console.log(token);
-                            console.log('==========')
+                            console.log('==========');
                         }
                         const params = new FormData();
                         params.append('token', token);
@@ -89,24 +89,11 @@
                             console.log(res);
                         }
                     });
-                })
+                });
                 firebase.messaging().onMessage((payload) => {
                     if (debug) {
-                        console.log(payload)
+                        console.log(payload);
                     }
-
-                    // let request;
-                    // if (payload.notification === undefined && payload.data === undefined) {
-                    //     return Promise;
-                    // }
-                    //
-                    // if (payload.notification !== undefined) {
-                    //     request = payload.notification;
-                    // } else {
-                    //     request = payload.data;
-                    // }
-                    //
-                    // return Promise.resolve(notice(request))
                 })
             },
         }

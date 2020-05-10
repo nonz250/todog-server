@@ -46,7 +46,7 @@
     import mixin from "../mixins/mixin";
 
     export default {
-        name: "Dialog",
+        name: "AlertDialog",
         mixins: [mixin],
         props: {
             dialog: {

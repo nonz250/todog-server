@@ -64,10 +64,8 @@
 </template>
 
 <script>
-    // import Mixins from '../mixins/mixin'
-
     export default {
-        // mixins: [Mixins],
+        name: 'NavDrawer',
         data() {
             return {
                 drawer: false,
@@ -76,32 +74,7 @@
                     {title: 'トップページ', icon: 'mdi-view-dashboard', link: "/", admin_only: false},
                     {title: 'ホーム', icon: 'mdi-home', link: "/home", admin_only: false},
                 ],
-                dropdownItems: [
-                    // {
-                    //     title: '管理者機能',
-                    //     icon: 'supervised_user_circle',
-                    //     admin_only: true,
-                    //     subItems: [
-                    //         {
-                    //             title: "ランチ会作成",
-                    //             icon: "restaurant",
-                    //             link: "/admin",
-                    //         },
-                    //     ]
-                    // },
-                    // {
-                    //     title: '過去のランチ会',
-                    //     icon: 'history',
-                    //     admin_only: true,
-                    //     subItems: [
-                    //         {
-                    //             title: "ランチ会一覧",
-                    //             icon: "list",
-                    //             link: "/admin/meetings",
-                    //         }
-                    //     ]
-                    // },
-                ],
+                dropdownItems: [],
                 user: null
             }
         },
