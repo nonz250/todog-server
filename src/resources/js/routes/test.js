@@ -1,16 +1,16 @@
-import Test from "../pages/Test";
+import Test from '../pages/Test';
 
 const routes = [
-    {
-        name: 'test',
-        path: '/test',
-        component: Test,
-        meta: {
-            title: 'Todog',
-        }
+  {
+    name: 'test',
+    path: '/test',
+    component: Test,
+    meta: {
+      title: 'Todog',
     }
+  }
 ];
 
 export default {
-    routes,
-}
+  routes,
+};

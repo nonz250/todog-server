@@ -6,12 +6,13 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue';
+window.Vue = Vue;
 
-import vuetify from "./plugins/vuetify";
-import router from "./plugins/router";
-import store from "./plugins/store";
-import firebase from "./plugins/firebase";
+import vuetify from './plugins/vuetify';
+import router from './plugins/router';
+import store from './plugins/store';
+import firebase from './plugins/firebase';
 
 /**
  * The following block of code may be used to automatically register your
@@ -32,10 +33,11 @@ Vue.component('app', require('./App.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+// eslint-disable-next-line no-unused-vars
 const app = new Vue({
-    el: '#app',
-    vuetify,
-    router,
-    store,
-    firebase,
+  el: '#app',
+  vuetify,
+  router,
+  store,
+  firebase,
 });

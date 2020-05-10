@@ -1,27 +1,27 @@
 const state = {
-    loader: false,
-}
+  loader: false,
+};
 
 const getters = {
-    loader: state => state.loader
-}
+  loader: state => state.loader
+};
 
 const mutations = {
-    setLoader(state, loading) {
-        state.loader = loading
-    }
-}
+  setLoader(state, loading) {
+    state.loader = loading;
+  }
+};
 
 const actions = {
-    setLoader(context, loading) {
-        context.commit('setLoader', loading)
-    },
-}
+  setLoader(context, loading) {
+    context.commit('setLoader', loading);
+  },
+};
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    mutations,
-    actions
-}
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+  actions
+};
