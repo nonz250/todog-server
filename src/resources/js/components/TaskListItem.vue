@@ -2,7 +2,10 @@
   <v-list-item
     :class="listClass"
   >
-    <v-list-item-action>
+    <v-icon class="handle mr-4">
+      mdi-cursor-move
+    </v-icon>
+    <v-list-item-action class="mr-2">
       <v-checkbox
         v-model="checked"
         @change="change"
@@ -222,6 +225,8 @@ export default {
       if (this.checked) {
         result['bg-color-checked'] = true;
       }
+      result['ml-0'] = true;
+      result['pl-0'] = true;
       return result;
     },
     checked: {
@@ -299,7 +304,17 @@ export default {
 </script>
 
 <style scoped>
-    .bg-color-checked {
-        background-color: #f5f5f5;
+    .handle {
+        padding: 5px;
+        margin-right: 10px;
+        border: solid #ccc 1px;
+        border-radius: 5px;
+    }
+    .handle:hover {
+        border: solid #000 1px;
+        cursor: grab;
+    }
+    .handle:active {
+        cursor: grabbing;
     }
 </style>

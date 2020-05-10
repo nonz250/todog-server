@@ -109,9 +109,9 @@
         <draggable
           v-model="taskList.tasks"
           group="group"
-          v-bind="{animation: 200}"
-          :disabled="!enabled"
+          v-bind="{animation: 200, handle: '.handle', delay: 200}"
           @add="dragEnd"
+          @end="test"
         >
           <div
             v-for="(task, index) in taskList.tasks"
@@ -252,7 +252,6 @@
 
 <script>
 import draggable from 'vuedraggable';
-import isMobile from 'ismobilejs';
 import tasks from '../app/tasks';
 import AlertDialog from './AlertDialog';
 import TaskListItem from './TaskListItem';
@@ -282,7 +281,6 @@ export default {
       ok: {color: 'default', text: ''},
       cancel: {color: 'default', text: 'キャンセル'},
       detail: false,
-      enabled: true,
       taskName: '',
       operationLists: [
         {
@@ -359,13 +357,11 @@ export default {
   },
   watch: {
     taskList() {
-      this.enabled = !isMobile(navigator.userAgent).any;
       const color = localStorage.getItem('task_list_color:' + this.taskList.id);
       this.color = color === null ? '#FFFFFF' : color;
     }
   },
   created() {
-    this.enabled = !isMobile(navigator.userAgent).any;
     const color = localStorage.getItem('task_list_color:' + this.taskList.id);
     this.color = color === null ? '#FFFFFF' : color;
   },
@@ -421,11 +417,11 @@ export default {
     archiveTasks() {
       this.dialog = false;
       const taskIds = [];
-      for (let i in this.taskList.tasks) {
-        if (this.taskList.tasks[i].status === tasks.STATUS_COMPLETED) {
-          taskIds.push(this.taskList.tasks[i].id);
+      this.taskList.tasks.forEach((item) => {
+        if (item.status === tasks.STATUS_COMPLETED) {
+          taskIds.push(item.id);
         }
-      }
+      });
       this.$emit('archive-tasks', taskIds);
     },
     getItemClass(color) {
@@ -463,17 +459,23 @@ export default {
       if (task !== null) {
         this.$emit('update-task', task);
       }
+    },
+    test() {
+      console.log('test');
     }
   }
 };
 </script>
 
 <style scoped>
-    .draggable-item:hover {
-        cursor: grab;
+    .bg-color-checked {
+        background-color: #f5f5f5;
     }
-
-    .draggable-item:active {
-        cursor: grabbing;
+    .sortable-chosen {
+        opacity: 0.7;
+        background-color:#dcdcdc;
+    }
+    .sortable-ghost {
+        background-color:#dcdcdc;
     }
 </style>
