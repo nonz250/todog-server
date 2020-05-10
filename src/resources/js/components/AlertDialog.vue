@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="dialog"
+    v-model="localDialog"
     width="500"
   >
     <v-card>
@@ -73,6 +73,16 @@ export default {
       type: Boolean,
       default: function () {
         return false;
+      }
+    }
+  },
+  computed: {
+    localDialog: {
+      get() {
+        return this.dialog;
+      },
+      set(value) {
+        this.$emit('input', value);
       }
     }
   },

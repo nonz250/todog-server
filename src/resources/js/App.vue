@@ -26,7 +26,7 @@
       title="アプリのアップデート"
       :ok="{color: 'success', text: '更新'}"
       @ok="updateApp"
-      @cancel="cancel"
+      @cancel="cancel()"
     >
       <v-container>
         <p>アプリのバージョンが更新されています。</p>

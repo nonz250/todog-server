@@ -231,7 +231,9 @@ export default {
 
       const res = await this.api('put', '/api/task/' + task.id, params);
 
-      if (res.status === 401) {
+      // eslint-disable-next-line no-empty
+      if (res.status === 200) {
+      } else if (res.status === 401) {
         await this.$store.dispatch('reloadDialog/setReloadDialog', true);
       } else if (res.status === 422) {
         await this.$store.dispatch('snackbar/setSnackbar', true);

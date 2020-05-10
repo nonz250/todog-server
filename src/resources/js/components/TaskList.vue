@@ -333,11 +333,11 @@ export default {
   computed: {
     isExistCompletedTasks() {
       const completedTasks = [];
-      for (let i in this.taskList.tasks) {
-        if (this.taskList.tasks[i].status === tasks.STATUS_COMPLETED) {
-          completedTasks.push(this.taskList.tasks[i]);
+      this.taskList.tasks.forEach((item) => {
+        if (item.status === tasks.STATUS_COMPLETED) {
+          completedTasks.push(item);
         }
-      }
+      });
       return completedTasks.length > 0;
     },
     inputTaskListName: {
