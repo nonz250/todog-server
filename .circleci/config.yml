@@ -2,13 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/php:7.3-node-browsers
+      - image: circleci/php:7.4-node-browsers
     working_directory: ~/src
     steps:
       - checkout
       - run:
           name: Composer Self Update
-          command: sudo composer self-update
+          command: sudo composer self-update --1
       - restore_cache:
           keys:
             - composer-v1-{{ checksum "src/composer.lock" }}
@@ -47,7 +47,7 @@ jobs:
 
   approval:
     docker:
-      - image: circleci/php:7.3-node-browsers
+      - image: circleci/php:7.4-node-browsers
     steps:
       - checkout
       - run:
@@ -56,7 +56,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/php:7.3.9-fpm-buster
+      - image: circleci/php:7.4.10-fpm-buster
     working_directory: ~/src
     environment:
       - BASH_ENV: .env
