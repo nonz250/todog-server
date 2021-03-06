@@ -75,7 +75,7 @@ final class NoticeTaskUseCase
                             new FcmBody((string) $limitedTask->getAttribute('name')),
                             new FcmIcon('/todog-round-icon.png'),
                             new FcmTimeToLeave(60),
-                            new FcmClickAction(route('root'))
+                            new FcmClickAction(url('/home'))
                         );
                         $sendFcmNotificationUseCase = new SendFcmNotificationUseCase($fcmNotification);
                         $sendFcmNotificationUseCase();
